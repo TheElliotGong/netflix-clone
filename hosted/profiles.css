@@ -6,3 +6,25 @@ html, body {
     overflow-x: hidden;
     background-color: #202020;
 }
+
+#accountProfiles{
+    height: auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+
+#currentProfiles{
+    display: flex;
+    flex-direction: row;
+}
+
+img.avatar {
+    margin-left: 25px;
+    margin-right: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 4px;
+    margin-top:10px;
+    float:left;
+}

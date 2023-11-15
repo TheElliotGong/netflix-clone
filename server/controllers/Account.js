@@ -73,7 +73,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/profiles' });
   } catch (err) {
     // If username is already in use, return error.
     console.log(err);
@@ -90,6 +90,9 @@ const signup = async (req, res) => {
  * @returns
  */
 const changePassword = async (req, res) => {
+
+  const account = await Account.findById(req.session.account._id).password;
+  
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
   // Validate new password/input.
@@ -99,10 +102,12 @@ const changePassword = async (req, res) => {
   if (pass !== pass2) {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
+  const newHash = await Account.generateHash(pass);
+  if(newHash === account.password){
+    return res.status(400).json({ error: 'New password cannot be the same as old password' });
+  }
   try {
     // Locate account attached to current session, and change password.
-    const newHash = await Account.generateHash(pass);
-    const account = await Account.findById(req.session.account._id);
     account.password = newHash;
     // Save account and redirect to maker page.
     await account.save();
@@ -114,7 +119,17 @@ const changePassword = async (req, res) => {
   }
 };
 
+const getProfiles = async (req, res) => {
+  try {
+    const query = { owner: req.session.account._id };
+    const docs = await Profile.find(query).select('name favorites').lean().exec();
 
+    return res.json({ profiles: docs });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured' });
+  }
+}
 //Export functions
 module.exports = {
   loginPage,
@@ -124,4 +139,5 @@ module.exports = {
   changePassword,
   changePasswordPage,
   profilesPage,
+  getProfiles
 };

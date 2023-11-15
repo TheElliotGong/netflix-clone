@@ -14,7 +14,7 @@ const redis = require('redis');
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1/Netflix-Clone';
 
 // Set up app.
 mongoose.connect(dbURL).catch((err) => {
