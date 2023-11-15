@@ -9,7 +9,7 @@ const { Account } = models;
  */
 const loginPage = (req, res) => res.render('login');
 
-const profilesPage = (req, res) => res.render('profiles');
+
 /**
  * Render the change password page.
  * @param {*} req
@@ -109,27 +109,16 @@ const changePassword = async (req, res) => {
   try {
     // Locate account attached to current session, and change password.
     account.password = newHash;
-    // Save account and redirect to maker page.
+    // Save account and have player log out.
     await account.save();
     req.session.account = Account.toAPI(account);
-    return res.json({ redirect: '/maker' });
+    return logout(req, res);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occurred' });
   }
 };
 
-const getProfiles = async (req, res) => {
-  try {
-    const query = { owner: req.session.account._id };
-    const docs = await Profile.find(query).select('name favorites').lean().exec();
-
-    return res.json({ profiles: docs });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: 'An error occured' });
-  }
-}
 //Export functions
 module.exports = {
   loginPage,
@@ -138,6 +127,5 @@ module.exports = {
   signup,
   changePassword,
   changePasswordPage,
-  profilesPage,
-  getProfiles
+
 };
