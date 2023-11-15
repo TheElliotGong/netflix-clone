@@ -9,6 +9,7 @@ const { Account } = models;
  */
 const loginPage = (req, res) => res.render('login');
 
+const profilesPage = (req, res) => res.render('profiles');
 /**
  * Render the change password page.
  * @param {*} req
@@ -44,7 +45,7 @@ const login = (req, res) => {
       return res.status(401).json({ error: 'Wrong username or password' });
     }
     req.session.account = Account.toAPI(account);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/profiles' });
   });
 };
 /**
@@ -112,6 +113,8 @@ const changePassword = async (req, res) => {
     return res.status(500).json({ error: 'An error occurred' });
   }
 };
+
+
 //Export functions
 module.exports = {
   loginPage,
@@ -120,4 +123,5 @@ module.exports = {
   signup,
   changePassword,
   changePasswordPage,
+  profilesPage,
 };
