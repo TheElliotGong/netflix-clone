@@ -104,7 +104,6 @@ const changePassword = async (req, res) => {
   }
   //Check if the current password is verified.
   let passwordVerification = await bcrypt.compare(currentPass, account.password);
-  console.log(passwordVerification);
   if(!passwordVerification){
     return res.status(400).json({ error: 'You must verify your current password' });
   }
@@ -117,9 +116,7 @@ const changePassword = async (req, res) => {
     account.password = newHash;
     // Save account and have player log out.
     await account.save();
-    // req.session.account = Account.toAPI(account);
-    // return logout(req, res);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/logout' });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occurred' });
