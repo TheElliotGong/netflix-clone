@@ -5,19 +5,27 @@ html, body {
     padding: 0;
     overflow-x: hidden;
     background-color: #202020;
+    color:white;
 }
-
+#content
+{
+    width: 70%;
+    height: fit-content;
+    margin: auto;
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 #accountProfiles{
-    height: auto;
+    height: 180px;
+    margin-bottom: 25px;
     width: fit-content;
     display: flex;
     flex-direction: row;
 }
 
-#currentProfiles{
-    display: flex;
-    flex-direction: row;
-}
 
 img.avatar {
     margin-left: 25px;
@@ -27,4 +35,25 @@ img.avatar {
     border-radius: 4px;
     margin-top:10px;
     float:left;
+}
+h1
+{
+    text-align: center;
+    font-size: 4vw;
+    
+}
+#manageProfiles
+{
+    border: 1px solid rgb(194, 194, 194);
+    color:rgb(194, 194, 194);
+    font-size: larger;
+    width: 200px;
+    height: 60px;
+    background-color: #202020;
+
+}
+#manageProfiles:hover
+{
+    border: 3px solid white;
+    color: white;
 }
