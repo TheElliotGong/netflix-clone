@@ -1,5 +1,5 @@
 const models = require('../models');
-
+const bcrypt = require('bcrypt');
 const { Account } = models;
 /**
  * Render the login page.
@@ -91,16 +91,22 @@ const signup = async (req, res) => {
  */
 const changePassword = async (req, res) => {
 
-  const account = await Account.findById(req.session.account._id).password;
-  
+  const account = await Account.findById(req.session.account._id);
+  const currentPass = `${req.body.currentPass}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
   // Validate new password/input.
-  if (!pass || !pass2) {
+  if (!pass || !pass2 || !currentPass) {
     return res.status(400).json({ error: 'All fields are required' });
   }
   if (pass !== pass2) {
-    return res.status(400).json({ error: 'Passwords do not match' });
+    return res.status(400).json({ error: 'New Passwords do not match' });
+  }
+  //Check if the current password is verified.
+  let passwordVerification = await bcrypt.compare(currentPass, account.password);
+  console.log(passwordVerification);
+  if(!passwordVerification){
+    return res.status(400).json({ error: 'You must verify your current password' });
   }
   const newHash = await Account.generateHash(pass);
   if(newHash === account.password){
@@ -111,8 +117,9 @@ const changePassword = async (req, res) => {
     account.password = newHash;
     // Save account and have player log out.
     await account.save();
-    req.session.account = Account.toAPI(account);
-    return logout(req, res);
+    // req.session.account = Account.toAPI(account);
+    // return logout(req, res);
+    return res.json({ redirect: '/maker' });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occurred' });

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
-
+let ProfileModel = {};
 const ProfileSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,7 +12,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   favorites: {
     type: [String],
-    required: true,
+    required: false,
   },
   owner: {
     type: mongoose.Schema.ObjectId,
@@ -30,5 +30,5 @@ ProfileSchema.statics.toAPI = (doc) => ({
   favorites: doc.favorites,
 });
 
-const ProfileModel = mongoose.model('Profile', ProfileSchema);
+ProfileModel = mongoose.model('Profile', ProfileSchema);
 module.exports = ProfileModel;

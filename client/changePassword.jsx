@@ -13,6 +13,7 @@ const handlePasswordChange = (e) => {
     //Get the passwords from the form.
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
+    const currentPass = e.target.querySelector('#currentPass').value;
     //Ensure all fields are filled in and new password is valid.
     if(!pass || !pass2)
     {
@@ -23,7 +24,7 @@ const handlePasswordChange = (e) => {
         helper.handleError('Passwords do not match.');
         return false;
     }
-    helper.sendPost(e.target.action, {pass, pass2 });
+    helper.sendPost(e.target.action, {pass, pass2, currentPass });
     return false;
 };
 /**
@@ -34,6 +35,8 @@ const handlePasswordChange = (e) => {
 const ChangePasswordWindow = (props) => {
     return (
         <form id="changePasswordForm" onSubmit={handlePasswordChange} action='/changePassword' method="POST">
+            <label htmlFor='currentPass'>Current Password: </label>
+            <input id="currentPass" type="password" name="currentPass" placeholder="Current Password" />
             <label htmlFor="pass">New Password: </label>
             <input id="pass" type="password" name="pass" placeholder="New Password" />
             <label htmlFor="pass">Re-enter New Password: </label>
