@@ -18,11 +18,14 @@ const router = (app) => {
   app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   app.get('/content', mid.requiresLogin, controllers.Profile.contentPage);
   app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+
   app.get('/profiles', mid.requiresLogin, controllers.Profile.profilesPage);
+  app.get('/manageProfiles', mid.requiresLogin, controllers.Profile.profilesPage);
+  app.get('/changeProfile', mid.requiresLogin, controllers.Profile.profilesPage);
   app.get('/getProfiles', mid.requiresLogin, controllers.Profile.getProfiles);
   app.post('/createProfile', mid.requiresLogin, controllers.Profile.createProfile);
   app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
-  app.get('/changeProfile', mid.requiresLogin, controllers.Profile.profilesPage);
+  
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

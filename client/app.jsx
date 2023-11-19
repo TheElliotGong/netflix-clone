@@ -62,7 +62,7 @@ const DomoList = (props) => {
                 <h3 className='domoAge'>Age: {domo.age}</h3>
                 <h3 className='domoLevel'>Level: {domo.level}</h3>
         </div>
-    })
+    });
     //Return the domo list.
     return(
         <div className="domoList">
