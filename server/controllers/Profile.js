@@ -15,7 +15,7 @@ const getProfiles = async (req, res) => {
     }
   }
 
-const makeProfile = async (req, res) => {
+const createProfile = async (req, res) => {
   if(!req.body.name)
   {
     return res.status(400).json({ error: 'Profile name is required.' });
@@ -41,7 +41,6 @@ const makeProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   
-  const profile = Profile.f
   if(!req.body.name)
   {
     return res.status(400).json({ error: 'Profile name is required.' });
@@ -49,4 +48,8 @@ const editProfile = async (req, res) => {
   
 };
 
-module.exports = {contentPage, getProfiles, profilesPage, makeProfile, editProfile};
+const changeProfile = async (req, res) => {
+
+};
+
+module.exports = {contentPage, getProfiles, profilesPage, createProfile, editProfile, changeProfile};

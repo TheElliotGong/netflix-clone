@@ -107,12 +107,15 @@ const changePassword = async (req, res) => {
   if(!passwordVerification){
     return res.status(400).json({ error: 'You must verify your current password' });
   }
-  const newHash = await Account.generateHash(pass);
-  if(newHash === account.password){
+  //Check if user is trying to change password to the same password.
+  if(pass === currentPass){
     return res.status(400).json({ error: 'New password cannot be the same as old password' });
   }
+  
+  
   try {
     // Locate account attached to current session, and change password.
+    const newHash = await Account.generateHash(pass);
     account.password = newHash;
     // Save account and have player log out.
     await account.save();

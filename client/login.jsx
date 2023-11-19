@@ -68,7 +68,7 @@ const LoginWindow = (props) => {
 
         </form> 
         <a id="signupButton" href="/signup" onClick={(e) => {e.preventDefault();
-         ReactDOM.render(<SignupWindow />, document.querySelector('#content')); }}>Sign up</a>
+         ReactDOM.render(<SignupWindow />, document.querySelector('#content')); }}>New to Netflix? <strong>Sign up now</strong>.</a>
         </div>
         
         
