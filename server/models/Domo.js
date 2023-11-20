@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
-//jkbfukvhvyukhfvu
+// jkbfukvhvyukhfvu
 const setName = (name) => _.escape(name).trim();
 // Set up Domo model and appropriate parameters.
 // Domos now have a level attribute.

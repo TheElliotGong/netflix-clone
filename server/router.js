@@ -5,7 +5,7 @@ const mid = require('./middleware');
 const router = (app) => {
   // Connect functions to url pathnames, now with middleware functions.
   app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
-  
+
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
@@ -24,8 +24,8 @@ const router = (app) => {
   app.get('/changeProfile', mid.requiresLogin, controllers.Profile.profilesPage);
   app.get('/getProfiles', mid.requiresLogin, controllers.Profile.getProfiles);
   app.post('/createProfile', mid.requiresLogin, controllers.Profile.createProfile);
-  app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
-  
+  // app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

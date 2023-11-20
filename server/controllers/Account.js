@@ -1,5 +1,6 @@
-const models = require('../models');
 const bcrypt = require('bcrypt');
+const models = require('../models');
+
 const { Account } = models;
 /**
  * Render the login page.
@@ -8,7 +9,6 @@ const { Account } = models;
  * @returns
  */
 const loginPage = (req, res) => res.render('login');
-
 
 /**
  * Render the change password page.
@@ -90,7 +90,6 @@ const signup = async (req, res) => {
  * @returns
  */
 const changePassword = async (req, res) => {
-
   const account = await Account.findById(req.session.account._id);
   const currentPass = `${req.body.currentPass}`;
   const pass = `${req.body.pass}`;
@@ -102,17 +101,16 @@ const changePassword = async (req, res) => {
   if (pass !== pass2) {
     return res.status(400).json({ error: 'New Passwords do not match' });
   }
-  //Check if the current password is verified.
-  let passwordVerification = await bcrypt.compare(currentPass, account.password);
-  if(!passwordVerification){
+  // Check if the current password is verified.
+  const passwordVerification = await bcrypt.compare(currentPass, account.password);
+  if (!passwordVerification) {
     return res.status(400).json({ error: 'You must verify your current password' });
   }
-  //Check if user is trying to change password to the same password.
-  if(pass === currentPass){
+  // Check if user is trying to change password to the same password.
+  if (pass === currentPass) {
     return res.status(400).json({ error: 'New password cannot be the same as old password' });
   }
-  
-  
+
   try {
     // Locate account attached to current session, and change password.
     const newHash = await Account.generateHash(pass);
@@ -126,7 +124,7 @@ const changePassword = async (req, res) => {
   }
 };
 
-//Export functions
+// Export functions
 module.exports = {
   loginPage,
   login,
@@ -134,6 +132,5 @@ module.exports = {
   signup,
   changePassword,
   changePasswordPage,
-
 
 };
