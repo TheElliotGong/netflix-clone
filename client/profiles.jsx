@@ -38,14 +38,16 @@ const Profiles = (props) => {
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return <div key={profile._id} className='profile'>
-                <button >< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
-                <h3 className='name' >Name: {profile.name}</h3>
+                <a href="/content">< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></a>
+                <h3 className='name' >{profile.name}</h3>
             </div>
         });
         return (
             <div className="profiles">
                 <h1>Who's Watching?</h1>
-                {profileNodes}
+                <div id = "profileRow">
+                    {profileNodes}
+                </div>
                 <a href="/manageProfiles" onClick={(e) => {
                     e.preventDefault();
 
@@ -76,14 +78,17 @@ const ManageProfiles = (props) => {
         const profileNodes = props.profiles.map(profile => {
             return <div key={profile._id} className='profile'>
                 <button >< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
-                <h3 className='name' >Name: {profile.name}</h3>
+                <h3 className='name' >{profile.name}</h3>
             </div>
         });
 
         return (
             <div className="profiles">
                 <h1>Manage Profiles:</h1>
-                {profileNodes}
+                <div id = "profileRow">
+                    {profileNodes}
+                </div>
+                
                 {createProfileForm()}
                 <a href="/profiles" onClick={(e) => {
                     e.preventDefault();

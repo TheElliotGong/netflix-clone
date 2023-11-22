@@ -97,6 +97,8 @@ const init = () => {
     );
 
     loadDomosFromServer();
+    
+   
 };
 
 window.onload = init;
