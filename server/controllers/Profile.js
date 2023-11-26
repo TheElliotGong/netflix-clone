@@ -2,7 +2,16 @@ const models = require('../models');
 
 const { Profile } = models;
 
-const contentPage = (req, res) => res.render('app');
+const contentPage = (req, res) => {
+  const param = req.query;
+  if(param)
+  {
+
+    console.log(param.profileId);
+  }
+  res.render('app');
+
+};
 const profilesPage = (req, res) => res.render('profiles');
 
 const getProfiles = async (req, res) => {

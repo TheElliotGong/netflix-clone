@@ -27,15 +27,15 @@ const handleDomo = (e) => {
  * @returns the html elements for the form.
  */
 const DomoForm = (props) => {
-    return(
-        <form id = "domoForm" onSubmit = {handleDomo} action="/maker" method="POST" className = "domoForm">
+    return (
+        <form id="domoForm" onSubmit={handleDomo} action="/maker" method="POST" className="domoForm">
             <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
+            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
             <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" name="age" min = "0"/>
+            <input id="domoAge" type="number" name="age" min="0" />
             <label htmlFor="level">Level: </label>
-            <input id="domoLevel" type="number" name="level" min = "1"/>
-            <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
+            <input id="domoLevel" type="number" name="level" min="1" />
+            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
     );
 };
@@ -46,9 +46,8 @@ const DomoForm = (props) => {
  */
 const DomoList = (props) => {
     //Check if domos exist.
-    if(props.domos.length === 0)
-    {
-        return(
+    if (props.domos.length === 0) {
+        return (
             <div className="domoList">
                 <h3 className="emptyDomo">No Domos yet</h3>
             </div>
@@ -57,15 +56,15 @@ const DomoList = (props) => {
     //Otherwise, create html elements from each domo object.
     const domoNodes = props.domos.map(domo => {
         return <div key={domo._id} className='domo'>
-           < img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
-              <h3 className='domoName'>Name: {domo.name}</h3>
+            < img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
+            <h3 className='domoName'>Name: {domo.name}</h3>
 
-                <h3 className='domoAge'>Age: {domo.age}</h3>
-                <h3 className='domoLevel'>Level: {domo.level}</h3>
+            <h3 className='domoAge'>Age: {domo.age}</h3>
+            <h3 className='domoLevel'>Level: {domo.level}</h3>
         </div>
     });
     //Return the domo list.
-    return(
+    return (
         <div className="domoList">
             {domoNodes}
         </div>
@@ -82,23 +81,35 @@ const loadDomosFromServer = async () => {
         <DomoList domos={data.domos} />, document.querySelector("#domos")
     );
 };
+const ProfileList = (props) => {
+    const profileNodes = props.profiles.map(profile => {
+        return <div key={profile._id} className='profile'>
+            <button >< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
+            <h3 className='name' >{profile.name}</h3>
+        </div>
+    });
+    return (<div className="profileList">
+        {profileNodes}
+    </div>);
+};
 
+const loadProfiles = async () => {
+    const response = await fetch('/getProfiles');
+    const data = await response.json();
+    ReactDOM.render(
+        <ProfileList profiles={data.profiles} />, document.querySelector("#profiles")
+    );
 
+};
 /**
  * Initializes the page.
  */
 const init = () => {
-    ReactDOM.render(
-        <DomoForm />, document.querySelector("#makeDomo")
-    );
     
-    ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector("#domos")
-    );
+    loadProfiles();
 
-    loadDomosFromServer();
-    
-   
+
+
 };
 
 window.onload = init;

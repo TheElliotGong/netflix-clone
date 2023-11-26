@@ -56,3 +56,14 @@ nav{
 .dropdown:hover .dropdownContent {
     display: block;
   }
+#profiles
+{
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+.profile
+{
+    display: flex;
+    flex-direction: row;
+}
