@@ -4,16 +4,16 @@ const { Profile } = models;
 
 const contentPage = (req, res) => {
   const param = req.query;
-  if(param)
-  {
-
+  if (param) {
     console.log(param.profileId);
   }
   res.render('app');
-
 };
 const profilesPage = (req, res) => res.render('profiles');
 
+const manageProfilesPage = (req, res) => {
+  res.render('profiles');
+};
 const getProfiles = async (req, res) => {
   try {
     const query = { owner: req.session.account._id };
@@ -27,8 +27,8 @@ const getProfiles = async (req, res) => {
 };
 
 const createProfile = async (req, res) => {
-  const name = req.body.name;
-  
+  const { name } = req.body;
+
   console.log(name);
   if (!req.body.name) {
     return res.status(400).json({ error: 'Profile name is required.' });
@@ -61,5 +61,5 @@ const createProfile = async (req, res) => {
 // };
 
 module.exports = {
-  contentPage, getProfiles, profilesPage, createProfile,
+  contentPage, getProfiles, profilesPage, createProfile, manageProfilesPage,
 };

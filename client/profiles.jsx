@@ -13,8 +13,6 @@ const handleProfile = (e) => {
     e.preventDefault();
     // helper.hideError();
 
-    const name = e.target.querySelector('#name').value;
-    console.log(name);
     if (!name) {
         // helper.handleError('Name is required!');
         return false;
