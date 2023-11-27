@@ -17,7 +17,7 @@ const hideError = () => {document.getElementById('domoMessage').classList.add('h
     });
   
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
+    // document.getElementById('domoMessage').classList.add('hidden');
   
     if(result.redirect) {
       window.location = result.redirect;

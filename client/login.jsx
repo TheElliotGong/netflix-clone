@@ -8,13 +8,13 @@ const ReactDOM = require('react-dom');
  */
 const handleLogin = (e) => {
     e.preventDefault();
-    helper.hideError();
+    // helper.hideError();
     //Get username and password from form and see if they're valid.
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
 
     if (!username || !pass) {
-        helper.handleError('Username or password is empty.');
+        // helper.handleError('Username or password is empty.');
         return false;
     }
     //Send post request with data.
@@ -28,19 +28,19 @@ const handleLogin = (e) => {
  */
 const handleSignup = (e) => {
     e.preventDefault();
-    helper.hideError();
+    // helper.hideError();
     //Get username and password from form and see if they're valid.
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
     //Make sure all fields are filled in.
     if (!username || !pass || !pass2) {
-        helper.handleError('All fields are required.');
+        // helper.handleError('All fields are required.');
         return false;
     }
     //Make sure passwords match.
     if (pass !== pass2) {
-        helper.handleError('Passwords do not match.');
+        // helper.handleError('Passwords do not match.');
         return false;
     }
     //Send post request with data.

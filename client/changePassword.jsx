@@ -9,7 +9,7 @@ const ReactDOM = require('react-dom');
  */
 const handlePasswordChange = (e) => {
     e.preventDefault();
-    helper.hideError();
+    // helper.hideError();
     //Get the passwords from the form.
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
@@ -17,11 +17,11 @@ const handlePasswordChange = (e) => {
     //Ensure all fields are filled in and new password is valid.
     if(!pass || !pass2)
     {
-        helper.handleError('All fields are required.');
+        // helper.handleError('All fields are required.');
         return false;
     }
     if (pass !== pass2) {
-        helper.handleError('Passwords do not match.');
+        // helper.handleError('Passwords do not match.');
         return false;
     }
     helper.sendPost(e.target.action, {pass, pass2, currentPass });

@@ -11,12 +11,12 @@ const ReactDOM = require('react-dom');
  */
 const handleProfile = (e) => {
     e.preventDefault();
-    helper.hideError();
+    // helper.hideError();
 
     const name = e.target.querySelector('#name').value;
     console.log(name);
     if (!name) {
-        helper.handleError('Name is required!');
+        // helper.handleError('Name is required!');
         return false;
     }
     helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
