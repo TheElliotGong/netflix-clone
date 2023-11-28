@@ -5,7 +5,8 @@ const { Profile } = models;
 const profilesPage = (req, res) => res.render('profiles');
 
 const contentPage = async (req, res) => {
- 
+  const profileId = req.cookies.profile;
+  console.log(profileId);
   res.render('app');
 };
 
@@ -59,5 +60,5 @@ const createProfile = async (req, res) => {
 // };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage
+  getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage,
 };
