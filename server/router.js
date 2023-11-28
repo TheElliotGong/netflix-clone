@@ -16,16 +16,12 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
-
   app.get('/content', mid.requiresLogin, controllers.Profile.contentPage);
 
   app.get('/profiles', mid.requiresLogin, controllers.Profile.profilesPage);
   app.get('/manageProfiles', mid.requiresLogin, controllers.Profile.profilesPage);
   app.get('/getProfiles', mid.requiresLogin, controllers.Profile.getProfiles);
   app.post('/createProfile', mid.requiresLogin, controllers.Profile.createProfile);
-  // app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
