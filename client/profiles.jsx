@@ -36,7 +36,7 @@ const Profiles = (props) => {
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return <div key={profile._id} className='profile'>
-                <a href={`/content?profileId=${profile._id}`}>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></a>
+                <a href="/content" onClick={(e)=>{document.cookie = 'profile='+ profile._id}}>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></a>
                 <h3 className='name' >{profile.name}</h3>
             </div>
         });

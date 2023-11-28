@@ -2,14 +2,12 @@ const models = require('../models');
 
 const { Profile } = models;
 
-const contentPage = (req, res) => {
-  const param = req.query;
-  if (param) {
-    console.log(param.profileId);
-  }
+const profilesPage = (req, res) => res.render('profiles');
+
+const contentPage = async (req, res) => {
+ 
   res.render('app');
 };
-const profilesPage = (req, res) => res.render('profiles');
 
 const manageProfilesPage = (req, res) => {
   res.render('profiles');
@@ -61,5 +59,5 @@ const createProfile = async (req, res) => {
 // };
 
 module.exports = {
-  contentPage, getProfiles, profilesPage, createProfile, manageProfilesPage,
+  getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage
 };
