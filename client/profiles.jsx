@@ -9,22 +9,39 @@ const ReactDOM = require('react-dom');
  * @param {*} e 
  * @returns 
  */
-const handleProfile = (e) => {
+const handleProfileCreation = (e) => {
     e.preventDefault();
     // helper.hideError();
-
-    if (!name) {
+    const profileName = e.target.querySelector('#profileName').value;
+    console.log(profileName);
+    if (!profileName) {
         // helper.handleError('Name is required!');
         return false;
     }
-    helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
+
+    helper.sendPost(e.target.action, { profileName }, reloadProfilesFromServer);
+
+    
     return false;
 };
+
+const handleLoadProfile = (e) => {
+    e.preventDefault();
+    const profileName = e.target.value;
+    console.log(profileName);
+    if (!profileName) {
+        // helper.handleError('Name is required!');
+        return false;
+    }
+    helper.sendPost('/loadProfile', { profileName });
+    return false;
+}
+
 const createProfileForm = () => {
     return <div>
-        <form id="createProfileForm" onSubmit={handleProfile} action='/createProfile' method="POST">
-            <label htmlFor='name'>Name: </label>
-            <input id="name" type="text" name="name" placeholder="Name" />
+        <form id="createProfileForm" onSubmit={handleProfileCreation} action='/createProfile' method="POST">
+            <label htmlFor='profileName'>Name: </label>
+            <input id="profileName" type="text" name="profileName" placeholder="Name" />
             <input className="formSubmit" type="submit" value="Create Profile" />
         </form>
     </div>
@@ -35,10 +52,10 @@ const Profiles = (props) => {
 
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <div key={profile._id} className='profile'>
-                <a href="/content" onClick={(e)=>{document.cookie = 'profile='+ profile._id}}>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></a>
-                <h3 className='name' >{profile.name}</h3>
-            </div>
+            return <a href = '/content' onclick={handleLoadProfile} className='profile' value = {profile.name}>
+                < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
+                <h3 id ='profileName'>{profile.name}</h3>
+            </a>
         });
         return (
             <div className="profiles">

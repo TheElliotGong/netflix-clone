@@ -28,6 +28,30 @@ const loadProfiles = async () => {
 
 };
 
+const loadVideos = async () => {
+    const response = await fetch('/loadVideos');
+    const data = await response.json();
+
+    
+}
+const loadFavoriteVideos = async () => {
+    const response = await fetch('/loadProfile');
+    const data = await response.json();
+    ReactDOM.render(
+        <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
+    );
+}
+
+const FavoriteVidoes = (props) => {
+    if(props.favorites.length === 0)
+    {
+        return(
+            <div className="favoriteVideoList">
+                <h3 className="noFavorites">No Favorite Videos yet</h3>
+            </div>
+        );
+    }
+};
 /**
  * Initializes the page.
  */

@@ -5,8 +5,8 @@ const { Profile } = models;
 const profilesPage = (req, res) => res.render('profiles');
 
 const contentPage = async (req, res) => {
-  const profileId = req.cookies.profile;
-  console.log(profileId);
+  req.session.profile = req.body.profileName;
+
   res.render('app');
 };
 
@@ -25,10 +25,22 @@ const getProfiles = async (req, res) => {
   }
 };
 
-const createProfile = async (req, res) => {
-  const { name } = req.body;
+const loadProfile = async (req, res) => {
 
-  console.log(name);
+    const name = req.body.profileName;
+    return Profile.ToAPI(name, (err, profile) => {
+      if (err || !profile) {
+        return res.status(401).json({ error: 'Profile unavailable' });
+      }
+      req.session.profile = Profile.toAPI(profile);
+      return res.json({ redirect: '/content' });
+    });
+
+
+  
+};
+
+const createProfile = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ error: 'Profile name is required.' });
   }
@@ -60,5 +72,5 @@ const createProfile = async (req, res) => {
 // };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage,
+  getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage, loadProfile,
 };

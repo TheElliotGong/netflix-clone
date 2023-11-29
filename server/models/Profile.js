@@ -27,8 +27,20 @@ const ProfileSchema = new mongoose.Schema({
 
 ProfileSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  favorites: doc.favorites,
+  _id: doc._id,
 });
+
+ProfileSchema.statics.authenticate = async (name, callback) => {
+  try {
+    const doc = await ProfileModel.findOne({ name }).exec();
+    if (!doc) {
+      return callback();
+    }
+    return callback(null, doc);
+  } catch (err) {
+    return callback(err);
+  }
+};
 
 ProfileModel = mongoose.model('Profile', ProfileSchema);
 module.exports = ProfileModel;

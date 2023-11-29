@@ -18,9 +18,13 @@ const router = (app) => {
   app.get('/content', mid.requiresLogin, controllers.Profile.contentPage);
 
   app.get('/profiles', mid.requiresLogin, controllers.Profile.profilesPage);
+
   app.get('/manageProfiles', mid.requiresLogin, controllers.Profile.profilesPage);
   app.get('/getProfiles', mid.requiresLogin, controllers.Profile.getProfiles);
   app.post('/createProfile', mid.requiresLogin, controllers.Profile.createProfile);
+
+  app.post('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
+  app.get('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
