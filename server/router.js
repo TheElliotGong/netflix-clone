@@ -24,7 +24,6 @@ const router = (app) => {
   app.post('/createProfile', mid.requiresLogin, controllers.Profile.createProfile);
 
   app.post('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
-  app.get('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
 
   app.get('/getVideos', mid.requiresLogin, controllers.Video.getVideos);
 

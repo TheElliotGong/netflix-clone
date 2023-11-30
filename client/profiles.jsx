@@ -12,14 +12,14 @@ const ReactDOM = require('react-dom');
 const handleProfileCreation = (e) => {
     e.preventDefault();
     // helper.hideError();
-    const profileName = e.target.querySelector('#profileName').value;
-    console.log(profileName);
-    if (!profileName) {
+    const name = e.target.querySelector('#profileName').value;
+    console.log(name);
+    if (!name) {
         // helper.handleError('Name is required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, { profileName }, reloadProfilesFromServer);
+    helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
 
     
     return false;
@@ -33,7 +33,7 @@ const handleLoadProfile = (e) => {
         // helper.handleError('Name is required!');
         return false;
     }
-    helper.sendGet('/loadProfile', { name });
+    helper.sendPost('/loadProfile', { name });
     return false;
 }
 
@@ -52,7 +52,7 @@ const Profiles = (props) => {
 
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <a href = {`/content?profile=${profile.name}`} onclick={handleLoadProfile} className='profile' value = {profile.name}>
+            return <a href = {`/content?profile=${profile.name}`} className='profile' value = {profile.name}>
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
                 <h3 id ='profileName'>{profile.name}</h3>
             </a>

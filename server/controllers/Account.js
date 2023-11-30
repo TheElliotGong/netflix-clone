@@ -44,6 +44,7 @@ const login = (req, res) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Wrong username or password' });
     }
+    //Create a new server session and redirect to the profile page.
     req.session.account = Account.toAPI(account);
     return res.json({ redirect: '/profiles' });
   });
@@ -68,7 +69,7 @@ const signup = async (req, res) => {
   }
 
   try {
-    // Create new account from data. Open new account page when successful.
+    // Create new account from data, then create a new server session and redirect to the profile page.
     const hash = await Account.generateHash(pass);
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
