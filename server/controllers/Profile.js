@@ -4,8 +4,6 @@ const { Profile } = models;
 
 const profilesPage = (req, res) => res.render('profiles');
 
-
-
 const manageProfilesPage = (req, res) => {
   res.render('profiles');
 };
@@ -22,9 +20,8 @@ const getProfiles = async (req, res) => {
 };
 
 const loadProfile = async (req, res) => {
-  const name = req.body.name;
-  if(!name)
-  {
+  const { name } = req.body;
+  if (!name) {
     return res.status(400).json({ error: 'Profile name required' });
   }
   return Profile.ToAPI(name, (err, profile) => {
@@ -58,5 +55,5 @@ const createProfile = async (req, res) => {
 };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage,loadProfile,
+  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile,
 };
