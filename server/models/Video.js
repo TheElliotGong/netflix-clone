@@ -15,7 +15,7 @@ const VideoSchema = new mongoose.Schema({
 
 VideoSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  genre: doc.genre,
+  genre: doc.genre
 });
 
 const VideoModel = mongoose.model('Video', VideoSchema);

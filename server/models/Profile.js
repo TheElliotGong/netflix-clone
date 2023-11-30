@@ -11,7 +11,7 @@ const ProfileSchema = new mongoose.Schema({
     set: setName,
   },
   favorites: {
-    type: [String],
+    type: [mongoose.Schema.ObjectId],
     required: false,
   },
   owner: {

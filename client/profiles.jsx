@@ -27,13 +27,13 @@ const handleProfileCreation = (e) => {
 
 const handleLoadProfile = (e) => {
     e.preventDefault();
-    const profileName = e.target.value;
-    console.log(profileName);
-    if (!profileName) {
+    const name = e.target.value;
+    console.log(name);
+    if (!name) {
         // helper.handleError('Name is required!');
         return false;
     }
-    helper.sendPost('/loadProfile', { profileName });
+    helper.sendGet('/loadProfile', { name });
     return false;
 }
 
@@ -52,7 +52,7 @@ const Profiles = (props) => {
 
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <a href = '/content' onclick={handleLoadProfile} className='profile' value = {profile.name}>
+            return <a href = {`/content?profile=${profile.name}`} onclick={handleLoadProfile} className='profile' value = {profile.name}>
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
                 <h3 id ='profileName'>{profile.name}</h3>
             </a>

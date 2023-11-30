@@ -26,18 +26,14 @@ const getProfiles = async (req, res) => {
 };
 
 const loadProfile = async (req, res) => {
-
-    const name = req.body.profileName;
-    return Profile.ToAPI(name, (err, profile) => {
-      if (err || !profile) {
-        return res.status(401).json({ error: 'Profile unavailable' });
-      }
-      req.session.profile = Profile.toAPI(profile);
-      return res.json({ redirect: '/content' });
-    });
-
-
-  
+  const { name } = req.query;
+  return Profile.ToAPI(name, (err, profile) => {
+    if (err || !profile) {
+      return res.status(401).json({ error: 'Profile unavailable' });
+    }
+    req.session.profile = Profile.toAPI(profile);
+    return res.json({ redirect: '/content' });
+  });
 };
 
 const createProfile = async (req, res) => {
@@ -60,16 +56,6 @@ const createProfile = async (req, res) => {
     return res.status(500).json({ error: 'An error occured' });
   }
 };
-
-// const editProfile = async (req, res) => {
-//   if (!req.body.name) {
-//     return res.status(400).json({ error: 'Profile name is required.' });
-//   }
-// };
-
-// const changeProfile = async (req, res) => {
-
-// };
 
 module.exports = {
   getProfiles, profilesPage, createProfile, manageProfilesPage, contentPage, loadProfile,

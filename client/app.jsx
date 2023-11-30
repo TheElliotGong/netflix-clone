@@ -19,7 +19,7 @@ const ProfileList = (props) => {
     </div>);
 };
 
-const loadProfiles = async () => {
+const getProfiles = async () => {
     const response = await fetch('/getProfiles');
     const data = await response.json();
     ReactDOM.render(
@@ -29,10 +29,14 @@ const loadProfiles = async () => {
 };
 
 const loadVideos = async () => {
-    const response = await fetch('/loadVideos');
-    const data = await response.json();
-
-    
+    const response = await fetch('/getVideos');
+    const data = await response.json();  
+    ReactDOM.render(
+        <Videos videos={data.videos} />, document.querySelector("#popular")
+    );  
+    ReactDOM.render(
+        <Videos videos={data.videos} />, document.querySelector("#trending")
+    );  
 }
 const loadFavoriteVideos = async () => {
     const response = await fetch('/loadProfile');
@@ -42,6 +46,26 @@ const loadFavoriteVideos = async () => {
     );
 }
 
+const Videos = (props) => {
+    if(props.videos.length === 0)
+    {
+        return(
+            <div className="videoList">
+                <h3 className="noVideos">No Videos yet</h3>
+            </div>
+        );
+    }
+    const videoNodes = props.videos.map(video => {
+        return <div id={video._id} className='video'>
+            <h3 className='name' >{video.name}</h3>
+            <h3 className='name' >{video.genre}</h3>
+            <button >Add to Favorites</button>
+        </div>
+    });
+    return (<div className="videoList">
+        {videoNodes}
+    </div>);
+};
 const FavoriteVidoes = (props) => {
     if(props.favorites.length === 0)
     {
@@ -52,13 +76,15 @@ const FavoriteVidoes = (props) => {
         );
     }
 };
+
+
 /**
  * Initializes the page.
  */
 const init = () => {
     
-    loadProfiles();
-
+    getProfiles();
+    loadVideos();
 
 
 };

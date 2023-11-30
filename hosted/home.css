@@ -76,3 +76,12 @@ h3
 {
     margin-left: 10px;
 }
+
+.videoList
+{
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}

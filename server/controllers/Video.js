@@ -1,7 +1,7 @@
 const models = require('../models');
 
 const { Video } = models;
-
+const { Profile } = models;
 const getVideos = async (req, res) => {
   try {
     const docs = await Video.find();
@@ -12,11 +12,13 @@ const getVideos = async (req, res) => {
   }
 };
 
-// const getFavoriteVideos = async (req, res) => {
-
-// };
+const getFavoriteVideos = async (req, res) => {
+  const profile = await Profile.find({ name: req.query.name }).populate('favorites').select('name favorites').lean()
+    .exec();
+  return res.json({ favorites: profile.favorites });
+};
 const contentPage = async (req, res) => {
   res.render('app');
 };
 
-module.exports = { getVideos, contentPage };
+module.exports = { getVideos, contentPage, getFavoriteVideos };

@@ -15,7 +15,7 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/content', mid.requiresLogin, controllers.Profile.contentPage);
+  app.get('/content', mid.requiresLogin, controllers.Video.contentPage);
 
   app.get('/profiles', mid.requiresLogin, controllers.Profile.profilesPage);
 
@@ -26,7 +26,12 @@ const router = (app) => {
   app.post('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
   app.get('/loadProfile', mid.requiresLogin, controllers.Profile.loadProfile);
 
+  app.get('/getVideos', mid.requiresLogin, controllers.Video.getVideos);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+  app.get('/*', mid.requiresSecure, controllers.notFoundPage);
+  app.post('/*', mid.requiresSecure, controllers.notFoundPage);
 };
 
 module.exports = router;
