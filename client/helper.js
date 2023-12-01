@@ -1,29 +1,4 @@
 
-  
-
-  const sendGet = async (url, params, handler) => {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      query: JSON.stringify(params),
-    });
-  
-    const result = await response.json();
-  
-    if(result.redirect) {
-      window.location = result.redirect;
-    }
-  
-    if(result.error) {
-      // handleError(result.error);
-    }
-    if(handler)
-    {
-        handler(result);
-    }
-  };
 
   const sendPost = async (url, data, handler) => {
     const response = await fetch(url, {
@@ -50,4 +25,14 @@
     }
   };
 
-  module.exports = { sendPost, sendGet};
+  const handleLoadProfile = (name) => {
+    
+    if (!name) {
+        // helper.handleError('Name is required!');
+        return false;
+    }
+    sendPost('/loadProfile', { name });
+    return false;
+}
+
+  module.exports = { sendPost, handleLoadProfile};

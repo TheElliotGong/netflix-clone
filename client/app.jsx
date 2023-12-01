@@ -9,10 +9,10 @@ const ReactDOM = require('react-dom');
 
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
-        return <div key={profile._id} className='profile'>
-            <a href='/content' onClick={(e)=>{document.cookie = 'profile='+profile._id}}>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></a>
+        return <button className='profile' onClick = {(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}}>
+            <img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
             <h3 className='name' >{profile.name}</h3>
-        </div>
+        </button>
     });
     return (<div className="profileList">
         {profileNodes}
@@ -39,27 +39,21 @@ const loadVideos = async () => {
     );  
 }
 const loadFavoriteVideos = async () => {
-    const response = await fetch('/loadProfile');
+    const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
+    console.log(data);
     ReactDOM.render(
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
 }
 
 const Videos = (props) => {
-    if(props.videos.length === 0)
-    {
-        return(
-            <div className="videoList">
-                <h3 className="noVideos">No Videos yet</h3>
-            </div>
-        );
-    }
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
-            <h3 className='name' >{video.name}</h3>
-            <h3 className='name' >{video.genre}</h3>
-            <button >Add to Favorites</button>
+            <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            <h4 className='name' >{video.name}</h4>
+            <h4 className='genre' >{video.genre}</h4>
+            <button class = "favoriteButton">Add to Favorites</button>
         </div>
     });
     return (<div className="videoList">
@@ -75,6 +69,17 @@ const FavoriteVidoes = (props) => {
             </div>
         );
     }
+    const videoNodes = props.favorites.map(video => {
+        return <div id={video._id} className='favoriteVideo'>
+            <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            <h3 className='name' >{video.name}</h3>
+            <h4 className='name' >{video.genre}</h4>
+            <button class = "favoriteButton">Remove from Favorites</button>
+        </div>
+    });
+    return (<div className="videoList">
+        {videoNodes}
+    </div>);
 };
 
 
@@ -85,6 +90,7 @@ const init = () => {
     
     getProfiles();
     loadVideos();
+    loadFavoriteVideos();
 
 
 };

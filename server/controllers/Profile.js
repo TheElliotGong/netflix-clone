@@ -24,7 +24,7 @@ const loadProfile = async (req, res) => {
   if (!name) {
     return res.status(400).json({ error: 'Profile name required' });
   }
-  return Profile.ToAPI(name, (err, profile) => {
+  return Profile.authenticate(name, (err, profile) => {
     if (err || !profile) {
       return res.status(401).json({ error: 'Profile unavailable' });
     }

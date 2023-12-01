@@ -11,7 +11,7 @@ const ReactDOM = require('react-dom');
  */
 const handleProfileCreation = (e) => {
     e.preventDefault();
-    // helper.hideError();
+
     const name = e.target.querySelector('#profileName').value;
     console.log(name);
     if (!name) {
@@ -21,21 +21,11 @@ const handleProfileCreation = (e) => {
 
     helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
 
-    
+
     return false;
 };
 
-const handleLoadProfile = (e) => {
-    e.preventDefault();
-    const name = e.target.value;
-    console.log(name);
-    if (!name) {
-        // helper.handleError('Name is required!');
-        return false;
-    }
-    helper.sendPost('/loadProfile', { name });
-    return false;
-}
+
 
 const createProfileForm = () => {
     return <div>
@@ -49,18 +39,18 @@ const createProfileForm = () => {
 
 const Profiles = (props) => {
 
-
+    //href = {`/content?profile=${profile.name}`}
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <a href = {`/content?profile=${profile.name}`} className='profile' value = {profile.name}>
+            return <button onClick={(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}} className='profile' >
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
-                <h3 id ='profileName'>{profile.name}</h3>
-            </a>
+                <h3 id='profileName' >{profile.name}</h3>
+            </button>
         });
         return (
             <div className="profiles">
                 <h1>Who's Watching?</h1>
-                <div id = "profileRow">
+                <div id="profileRow">
                     {profileNodes}
                 </div>
                 <a href="/manageProfiles" onClick={(e) => {
@@ -100,10 +90,10 @@ const ManageProfiles = (props) => {
         return (
             <div className="profiles">
                 <h1>Manage Profiles:</h1>
-                <div id = "profileRow">
+                <div id="profileRow">
                     {profileNodes}
                 </div>
-                
+
                 {createProfileForm()}
                 <a href="/profiles" onClick={(e) => {
                     e.preventDefault();

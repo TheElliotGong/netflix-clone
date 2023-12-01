@@ -13,6 +13,7 @@ const ProfileSchema = new mongoose.Schema({
   favorites: {
     type: [mongoose.Schema.ObjectId],
     required: false,
+    ref: 'Video',
   },
   owner: {
     type: mongoose.Schema.ObjectId,
@@ -27,7 +28,6 @@ const ProfileSchema = new mongoose.Schema({
 
 ProfileSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-
   _id: doc._id,
 });
 
