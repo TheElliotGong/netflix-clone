@@ -80,8 +80,6 @@ p
     overflow-wrap: break-word;
     word-break: break-all;
     width: 20vw;
-
-
 }
 .video
 {
@@ -111,9 +109,12 @@ p
 {
     margin-right: 0;
 }
-.favoriteButton
+.buttonContainer
 {
+    width: fit-content;
     margin: 0 auto 20px;
+    
+    
 }
 
 .profile, .dropdownButton

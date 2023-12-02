@@ -1,29 +1,24 @@
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
-/**
- * This function handles the creation of a domo.
- * @param {*} e 
- * @returns 
- */
 
-
+const handleFavorites = (videoID, action) => {
+    
+        if (!videoID) {
+            // helper.handleError('Name is required!');
+            return false;
+        }
+        helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
+        return false;
+    }
 const AddToFavoritesButton = (props) => {
-    return <button onclick = {(e)=>{e.preventDefault(); handleAddtoFavorites(props.videoID);}}>Add to Favorites</button>
+    return <button onclick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
 };
 
 const RemoveFromFavoritesButton = (props) => {
-    return <button>Remove from Favorites</button>
+    return <button onclick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/removeFromFavorites');}}>Remove from Favorites</button>
 };
-const handleAddtoFavorites = (videoID) => {
 
-    if (!videoID) {
-        // helper.handleError('Name is required!');
-        return false;
-    }
-    helper.sendPost(e.target.action, { videoID }, reloadFavoritesFromServer);
-    return false;
-};
 
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
@@ -96,7 +91,7 @@ const FavoriteVidoes = (props) => {
             <p className='name' >{video.name}</p>
             <p className='name' >{video.genre}</p>
             <div className = "buttonContainer">
-              <button class = "favoriteButton">Remove from Favorites</button>  
+              <RemoveFromFavoritesButton videoID = {video._id} />
             </div>
             
         </div>
