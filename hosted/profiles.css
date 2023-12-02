@@ -65,3 +65,20 @@ h1
     flex-direction: row;
     justify-content: space-between;
 }
+button
+{
+    background: none;
+    border: none;
+    color: rgb(216, 216, 216);
+}
+button:hover
+{
+    cursor:pointer;
+    color:white;
+
+}
+
+button:hover img
+{
+    border: solid 2px white;
+}

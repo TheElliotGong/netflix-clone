@@ -72,21 +72,22 @@ nav{
 {
     margin: 0 40px;
 }
-h4
+p
 {
     margin: 8px auto;
     text-align: center;
-    width: 80%;
-    height: fit-content;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    width: 20vw;
+
 
 }
 .video
 {
     width: 20vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    height: fit-content;
+    display: block;
 }
 .thumbnail
 {
@@ -113,4 +114,20 @@ h4
 .favoriteButton
 {
     margin: 0 auto 20px;
+}
+
+.profile, .dropdownButton
+{
+    background: none;
+    border: none;
+    color: white;
+}
+.profile h3
+{
+    margin-left: 10px;
+}
+.profile:hover
+{
+    cursor:pointer;
+
 }

@@ -27,8 +27,9 @@ const router = (app) => {
 
   app.get('/getVideos', mid.requiresLogin, controllers.Video.getVideos);
   app.get('/getFavoriteVideos', mid.requiresLogin, controllers.Video.getFavoriteVideos);
-  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.post('/addtoFavorites', mid.requiresLogin, controllers.Video.addtoFavorites);
 
+  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.get('/*', mid.requiresSecure, controllers.notFoundPage);
   app.post('/*', mid.requiresSecure, controllers.notFoundPage);
 };

@@ -7,6 +7,24 @@ const ReactDOM = require('react-dom');
  * @returns 
  */
 
+
+const AddToFavoritesButton = (props) => {
+    return <button onclick = {(e)=>{e.preventDefault(); handleAddtoFavorites(props.videoID);}}>Add to Favorites</button>
+};
+
+const RemoveFromFavoritesButton = (props) => {
+    return <button>Remove from Favorites</button>
+};
+const handleAddtoFavorites = (videoID) => {
+
+    if (!videoID) {
+        // helper.handleError('Name is required!');
+        return false;
+    }
+    helper.sendPost(e.target.action, { videoID }, reloadFavoritesFromServer);
+    return false;
+};
+
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
         return <button className='profile' onClick = {(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}}>
@@ -51,9 +69,12 @@ const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
             <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
-            <h4 className='name' >{video.name}</h4>
-            <h4 className='genre' >{video.genre}</h4>
-            <button class = "favoriteButton">Add to Favorites</button>
+            <p className='name' >{video.name}</p>
+            <p className='genre' >{video.genre}</p>
+            <div className = "buttonContainer">
+                <AddToFavoritesButton videoID = {video._id} />
+            </div>
+            
         </div>
     });
     return (<div className="videoList">
@@ -72,9 +93,12 @@ const FavoriteVidoes = (props) => {
     const videoNodes = props.favorites.map(video => {
         return <div id={video._id} className='favoriteVideo'>
             <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
-            <h3 className='name' >{video.name}</h3>
-            <h4 className='name' >{video.genre}</h4>
-            <button class = "favoriteButton">Remove from Favorites</button>
+            <p className='name' >{video.name}</p>
+            <p className='name' >{video.genre}</p>
+            <div className = "buttonContainer">
+              <button class = "favoriteButton">Remove from Favorites</button>  
+            </div>
+            
         </div>
     });
     return (<div className="videoList">
