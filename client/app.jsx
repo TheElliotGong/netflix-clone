@@ -8,17 +8,28 @@ const handleFavorites = (videoID, action) => {
             // helper.handleError('Name is required!');
             return false;
         }
+        console.log(videoID);
         helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
         return false;
     }
 const AddToFavoritesButton = (props) => {
-    return <button onclick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
+    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
 };
 
 const RemoveFromFavoritesButton = (props) => {
-    return <button onclick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/removeFromFavorites');}}>Remove from Favorites</button>
+    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/removeFromFavorites');}}>Remove from Favorites</button>
 };
 
+const reloadFavoritesFromServer = async () => {
+    const response = await fetch('/getFavoriteVideos');
+    const data = await response.json();
+
+    //Render the domos under the selected html element.
+
+    ReactDOM.render(
+        <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
+    );
+};
 
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {

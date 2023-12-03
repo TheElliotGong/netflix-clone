@@ -30,9 +30,11 @@ const getFavoriteVideos = async (req, res) => {
 const addToFavorites = async (req, res) => {
   try {
     const videoID = req.body.videoID;
-    const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
+    const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
+    console.log(profile);
     profile.favorites.push(videoID);
-    await Profile.save();
+    console.log(profile.favorites);
+    await profile.save();
     return res.status(200).json({ message: 'Video added to favorites' });
   } catch (err) {
     console.log(err);
@@ -44,9 +46,9 @@ const removeFromFavorites = async (req, res) => {
   try
   {
     const videoID = req.body.videoID;
-    const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
+    const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
     profile.favorites.pull(videoID);
-    await Profile.save();
+    await profile.save();
     return res.status(200).json({ message: 'Video removed from favorites' });
   }catch(err)
   {

@@ -98,7 +98,6 @@ p
     white-space: nowrap;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    justify-content: space-between;
 }
 
 .videoList > *
