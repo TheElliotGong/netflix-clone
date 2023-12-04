@@ -29,11 +29,10 @@ const getFavoriteVideos = async (req, res) => {
 
 const addToFavorites = async (req, res) => {
   try {
-    const videoID = req.body.videoID;
+    const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
-    //Check if video is already included in favorites
-    if(profile.favorites.includes(videoID))
-    {
+    // Check if video is already included in favorites
+    if (profile.favorites.includes(videoID)) {
       return res.status(409).json({ message: 'Video already in favorites' });
     }
     profile.favorites.push(videoID);
@@ -46,24 +45,21 @@ const addToFavorites = async (req, res) => {
 };
 
 const removeFromFavorites = async (req, res) => {
-  try
-  {
-    const videoID = req.body.videoID;
+  try {
+    const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
-    if(!profile.favorites.includes(videoID))
-    {
+    if (!profile.favorites.includes(videoID)) {
       return res.status(404).json({ message: 'Video not in favorites' });
     }
     profile.favorites.pull(videoID);
     await profile.save();
     return res.status(200).json({ message: 'Video removed from favorites' });
-  }catch(err)
-  {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
 
 module.exports = {
-  getVideos, contentPage, getFavoriteVideos, addToFavorites, removeFromFavorites
+  getVideos, contentPage, getFavoriteVideos, addToFavorites, removeFromFavorites,
 };

@@ -33,6 +33,7 @@ const handleSignup = (e) => {
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
+    const premium = e.target.querySelector('#premium').checked;
     //Make sure all fields are filled in.
     if (!username || !pass || !pass2) {
         // helper.handleError('All fields are required.');
@@ -44,7 +45,7 @@ const handleSignup = (e) => {
         return false;
     }
     //Send post request with data.
-    helper.sendPost(e.target.action, { username, pass, pass2 });
+    helper.sendPost(e.target.action, { username, pass, pass2, premium });
 
     return false;
 };
@@ -89,8 +90,10 @@ const SignupWindow = (props) => {
             <input id="user" type="text" name="username" placeholder="Username" />
             <label htmlFor="pass">Password: </label>
             <input id="pass" type="password" name="pass" placeholder="Password" />
-            <label htmlFor="pass">Re-enter Password: </label>
+            <label htmlFor="pass2">Re-enter Password: </label>
             <input id="pass2" type="password" name="pass2" placeholder="Re-enter Password" />
+            <label htmlFor="premium">Premium: </label>
+            <input id = "premium" type = "checkbox"/>
             <input className="formSubmit" type="submit" value="Sign Up" />
         </form> 
         <a id="loginButton" href="/login" onClick={(e) => {e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content'));}}>Already have an account? <strong>Log In</strong></a>

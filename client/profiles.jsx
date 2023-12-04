@@ -39,12 +39,12 @@ const createProfileForm = () => {
 
 const Profiles = (props) => {
 
-    //href = {`/content?profile=${profile.name}`}
+    
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return <button onClick={(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}} className='profile' >
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
-                <h3 id='profileName' >{profile.name}</h3>
+                <h2 id='profileName' >{profile.name}</h2>
             </button>
         });
         return (
@@ -82,8 +82,8 @@ const ManageProfiles = (props) => {
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return <div key={profile._id} className='profile'>
-                <button >< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
-                <h3 className='name' >{profile.name}</h3>
+                <button className = 'manageProfile'>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
+                <h2 className='name' >{profile.name}</h2>
             </div>
         });
 

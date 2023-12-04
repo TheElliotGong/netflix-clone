@@ -30,13 +30,10 @@ html, body {
     margin-left: 50px;
 }
 img.avatar {
-    margin-left: 25px;
-    margin-right: 10px;
+    margin: 0 auto 10px;
     height: 100px;
     width: 100px;
     border-radius: 4px;
-    margin-top:10px;
-    float:left;
 }
 h1
 {
@@ -61,24 +58,42 @@ h1
 }
 #profileRow
 {
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-button
+#profileRow > * 
+{
+    margin-right: 20px;
+}
+#profileRow > *:last-child {
+    margin-right: 0;
+}
+.profile, .manageProfile
 {
     background: none;
     border: none;
-    color: rgb(216, 216, 216);
+    color: rgb(202, 202, 202);
 }
-button:hover
+.profile:hover, a:hover
 {
     cursor:pointer;
     color:white;
 
 }
 
-button:hover img
+.profile:hover img, a:hover
 {
     border: solid 2px white;
+}
+a
+{
+    display: block;
+    text-decoration: none;
+    width: fit-content;
+    padding: 20px 50px;
+    color: rgb(202, 202, 202);
+    border: 2px solid rgb(202, 202, 202);
+    font-size: larger;
 }

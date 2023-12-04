@@ -58,15 +58,46 @@ nav{
 .dropdown:hover .dropdownContent {
     display: block;
   }
-#profiles
+.profileList > * 
+  {
+      margin-bottom: 10px;
+  }
+ .profileList > *:last-child {
+      margin-bottom: 0;
+  }
+.profile, .dropdownButton
 {
-    display: flex;
-    flex-direction: column;
+    background: none;
+    border: none;
+    color: white;
+}
+.profile h3
+{
+    margin-left: 10px;
+}
+.profile:hover
+{
+    cursor:pointer;
+
 }
 .profile
 {
     display: flex;
     flex-direction: row;
+    background: none;
+    border: none;
+    color: rgb(202, 202, 202);
+}
+.profile:hover
+{
+    cursor:pointer;
+    color:white;
+
+}
+
+.profile:hover img
+{
+    border: solid 2px white;
 }
 #videos
 {
@@ -112,22 +143,13 @@ p
 {
     width: fit-content;
     margin: 0 auto 20px;
-    
-    
 }
-
-.profile, .dropdownButton
+a
 {
-    background: none;
-    border: none;
-    color: white;
+    color: rgb(202, 202, 202);
+    text-decoration: none;
 }
-.profile h3
-{
-    margin-left: 10px;
-}
-.profile:hover
-{
-    cursor:pointer;
-
+a:hover
+{color: white;
+    text-decoration: underline;
 }

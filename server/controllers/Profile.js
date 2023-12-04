@@ -1,7 +1,7 @@
 const models = require('../models');
 
 const { Profile } = models;
-
+const { Account } = models;
 const profilesPage = (req, res) => res.render('profiles');
 
 const manageProfilesPage = (req, res) => {
@@ -42,8 +42,18 @@ const createProfile = async (req, res) => {
     owner: req.session.account._id,
   };
   try {
+    
+    const account = await Account.findOne({ _id: req.session.account._id }).exec();
+    //Check if user exceeds profile limit.
+    if ((account.premium == false && account.profileCount >= 5) || (account.premium == true && account.profileCount >= 8)) 
+    {
+      return res.status(400).json({ error: 'Maximum number of profiles reached.' });
+    }
     const newProfile = new Profile(profileData);
     await newProfile.save();
+    
+    account.profileCount += 1;
+    await account.save();
     return res.status(201).json({ name: newProfile.name, owner: newProfile.owner });
   } catch (err) {
     console.log(err);

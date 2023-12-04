@@ -34,10 +34,19 @@ const AccountSchema = new mongoose.Schema({
     default: false,
     required: true,
   },
+  profileCount:
+  {
+    type: Number,
+    default: 1,
+    minimum: 1,
+    required: true,
+
+  },
   password: {
     type: String,
     required: true,
   },
+
   createdDate: {
     type: Date,
     default: Date.now,
