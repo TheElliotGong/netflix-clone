@@ -72,7 +72,7 @@ const signup = async (req, res) => {
   try {
     // Create new account, then create a new server session and redirect to the profile page.
     const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash , premium});
+    const newAccount = new Account({ username, password: hash, premium });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
     return res.json({ redirect: '/profiles' });

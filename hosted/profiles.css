@@ -6,10 +6,12 @@ html, body {
     overflow-x: hidden;
     background-color: rgba(35, 35, 35,1);
     color:white;
+    font-weight: 200;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #content
 {
-    width: 70%;
+    width: fit-content;
     height: fit-content;
     margin: auto;
     margin-top: 150px;
@@ -59,16 +61,9 @@ h1
 #profileRow
 {
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-#profileRow > * 
-{
-    margin-right: 20px;
-}
-#profileRow > *:last-child {
-    margin-right: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
 }
 .profile, .manageProfile
 {
@@ -76,18 +71,18 @@ h1
     border: none;
     color: rgb(202, 202, 202);
 }
-.profile:hover, a:hover
+.profile:hover, #manageProfilesButton:hover
 {
     cursor:pointer;
     color:white;
 
 }
 
-.profile:hover img, a:hover
+.profile:hover img, #manageProfilesButton:hover
 {
     border: solid 2px white;
 }
-a
+#manageProfilesButton, #doneButton
 {
     display: block;
     text-decoration: none;
@@ -97,4 +92,14 @@ a
     color: rgb(202, 202, 202);
     border: 2px solid rgb(202, 202, 202);
     font-size: larger;
+    font-weight: bold;
+}
+#doneButton
+{
+    background-color: white;
+    color: rgb(35,35,35);
+}
+#doneButton:hover
+{
+    background-color: rgb(228, 228, 228);
 }

@@ -68,8 +68,11 @@ const LoginWindow = (props) => {
             <input className="formSubmit" type="submit" value="Sign In" />
 
         </form> 
-        <a id="signupButton" href="/signup" onClick={(e) => {e.preventDefault();
-         ReactDOM.render(<SignupWindow />, document.querySelector('#content')); }}>New to Netflix? <strong>Sign up now</strong>.</a>
+        <div id = "signUp">
+            New to Netflix? <a id="signupButton" href="/signup" onClick={(e) => {e.preventDefault();
+         ReactDOM.render(<SignupWindow />, document.querySelector('#content')); }}><strong>Sign up now</strong>.</a>
+        </div>
+        
         </div>
         
         
@@ -96,7 +99,10 @@ const SignupWindow = (props) => {
             <input id = "premium" type = "checkbox"/>
             <input className="formSubmit" type="submit" value="Sign Up" />
         </form> 
-        <a id="loginButton" href="/login" onClick={(e) => {e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content'));}}>Already have an account? <strong>Log In</strong></a>
+        <div id = "login">
+            Already have an account? <a id="loginButton" href="/login" onClick={(e) => {e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content'));}}><strong>Log In</strong></a>
+        </div>
+        
         </div>
         
         

@@ -53,7 +53,7 @@ const Profiles = (props) => {
                 <div id="profileRow">
                     {profileNodes}
                 </div>
-                <a href="/manageProfiles" onClick={(e) => {
+                <a id = "manageProfilesButton" href="/manageProfiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<ManageProfiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -65,7 +65,7 @@ const Profiles = (props) => {
         return (
             <div className="profiles">
                 <h1>No Profiles Yet</h1>
-                <a href="/manageProfiles" onClick={(e) => {
+                <a id = "manageProfilesButton" href="/manageProfiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<ManageProfiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -95,7 +95,7 @@ const ManageProfiles = (props) => {
                 </div>
 
                 {createProfileForm()}
-                <a href="/profiles" onClick={(e) => {
+                <a id = "doneButton" href="/profiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<Profiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -108,7 +108,7 @@ const ManageProfiles = (props) => {
             <div className="profiles">
                 <h1>No Profiles Yet</h1>
                 {createProfileForm()}
-                <a href="/profiles" onClick={(e) => {
+                <a id = "doneButton" href="/profiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<Profiles profiles={props.profiles} />, document.querySelector("#profileContent"));
