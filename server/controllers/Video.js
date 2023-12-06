@@ -2,7 +2,7 @@ const models = require('../models');
 
 const { Video } = models;
 const { Profile } = models;
-const { Account } = models;
+
 
 const contentPage = async (req, res) => {
   res.render('app');
@@ -12,7 +12,7 @@ const getVideos = async (req, res) => {
     const docs = await Video.find();
     const premiumStatus = req.session.account.premium;
     console.log(premiumStatus);
-    return res.json({ videos: docs , premiumStatus: premiumStatus});
+    return res.json({ videos: docs, premiumStatus });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
