@@ -61,28 +61,24 @@ const loadVideos = async () => {
     ReactDOM.render(
         <Videos videos={data.videos} />, document.querySelector("#trending")
     );  
+    if(data.premiumStatus)
+    {
+        ReactDOM.render(<Videos videos={data.videos} />, document.querySelector("#exclusive"));
+    }
+    else
+    {
+        ReactDOM.render(<h3 className="exclusiveMessage">Become a premium member to access exclusive content</h3>, document.querySelector("#exclusive"));
+    }
 }
 const loadFavoriteVideos = async () => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
-    console.log(data);
     ReactDOM.render(
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
 }
-const ExclusiveVideos = (props) => {
-    const videoNodes = props.videos.map(video => {
-        return <div id={video._id} className='video'>
-            <img src='/assets/img/locked_video.jpg' alt = "video" class = "thumbnail" />
-            <p className='name' >{video.name}</p>
-            <p className='genre' >{video.genre}</p>
-            <div className = "buttonContainer">
-                <AddToFavoritesButton videoID = {video._id} />
-            </div>
-            
-        </div>
-    });
-};
+
+
 const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
@@ -133,7 +129,6 @@ const init = () => {
     getProfiles();
     loadVideos();
     loadFavoriteVideos();
-
 
 };
 

@@ -44,7 +44,7 @@ const Profiles = (props) => {
         const profileNodes = props.profiles.map(profile => {
             return <button onClick={(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}} className='profile' >
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
-                <h2 id='profileName' >{profile.name}</h2>
+                <h2 className='name' >{profile.name}</h2>
             </button>
         });
         return (
@@ -82,8 +82,9 @@ const ManageProfiles = (props) => {
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return <div key={profile._id} className='profile'>
-                <button className = 'manageProfile'>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' /></button>
-                <h2 className='name' >{profile.name}</h2>
+                <button className = 'manageProfile'>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
+                <h2 className='name' >{profile.name}</h2></button>
+                
             </div>
         });
 

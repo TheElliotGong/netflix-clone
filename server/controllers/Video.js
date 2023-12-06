@@ -2,6 +2,7 @@ const models = require('../models');
 
 const { Video } = models;
 const { Profile } = models;
+const { Account } = models;
 
 const contentPage = async (req, res) => {
   res.render('app');
@@ -9,7 +10,9 @@ const contentPage = async (req, res) => {
 const getVideos = async (req, res) => {
   try {
     const docs = await Video.find();
-    return res.json({ videos: docs });
+    const premiumStatus = req.session.account.premium;
+    console.log(premiumStatus);
+    return res.json({ videos: docs , premiumStatus: premiumStatus});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
@@ -61,5 +64,5 @@ const removeFromFavorites = async (req, res) => {
 };
 
 module.exports = {
-  getVideos, contentPage, getFavoriteVideos, addToFavorites, removeFromFavorites,
+  contentPage, getVideos, getFavoriteVideos, addToFavorites, removeFromFavorites,
 };

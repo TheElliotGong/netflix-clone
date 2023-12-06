@@ -45,7 +45,7 @@ const createProfile = async (req, res) => {
     const account = await Account.findOne({ _id: req.session.account._id }).exec();
     // Check if user exceeds profile limit.
     if ((account.premium === false && account.profileCount >= 5)
-    || (account.premium === true && account.profileCount >= 8)) {
+    || (account.premium === true && account.profileCount >= 10)) {
       return res.status(400).json({ error: 'Maximum number of profiles reached.' });
     }
     const newProfile = new Profile(profileData);
