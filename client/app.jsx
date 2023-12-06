@@ -70,7 +70,19 @@ const loadFavoriteVideos = async () => {
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
 }
-
+const ExclusiveVideos = (props) => {
+    const videoNodes = props.videos.map(video => {
+        return <div id={video._id} className='video'>
+            <img src='/assets/img/locked_video.jpg' alt = "video" class = "thumbnail" />
+            <p className='name' >{video.name}</p>
+            <p className='genre' >{video.genre}</p>
+            <div className = "buttonContainer">
+                <AddToFavoritesButton videoID = {video._id} />
+            </div>
+            
+        </div>
+    });
+};
 const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
