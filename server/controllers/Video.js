@@ -26,13 +26,10 @@ const getSpecialVideos = async (req, res) => {
     let docs;
     if (req.url === '/getFavoriteVideos') {
       docs = await Video.find({ _id: { $in: profile.favorites } }).lean().exec();
-      return res.json({ favorites: docs });
     }
-    else if (req.url === '/getWatchedVideos') {
+    if (req.url === '/getWatchedVideos') {
       docs = await Video.find({ _id: { $in: profile.watched } }).lean().exec();
-      return res.json({ watched: docs });
-    }
-
+    } return res.json({ videos: docs });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
@@ -40,7 +37,7 @@ const getSpecialVideos = async (req, res) => {
 };
 const addSpecialVideo = async (req, res) => {
   try {
-    const videoID = req.body.videoID;
+    const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
     if (req.url === '/addToFavorites') {
       if (profile.favorites.includes(videoID)) {
@@ -48,21 +45,17 @@ const addSpecialVideo = async (req, res) => {
       }
       profile.favorites.push(videoID);
       await profile.save();
-      return res.status(200).json({ message: 'Video added to favorites' });
-
     }
-    else if (req.url === '/addToWatched') {
+    if (req.url === '/addToWatched') {
       if (profile.watched.includes(videoID)) {
         return res.status(409).json({ message: 'Video already in watched' });
-
       }
       profile.watched.push(videoID);
       await profile.save();
-      return res.status(200).json({ message: 'Video added to Watched' });
     }
+    return res.status(200).json({ message: 'Successful save' });
 
     // Check if video is already included in favorites
-
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });

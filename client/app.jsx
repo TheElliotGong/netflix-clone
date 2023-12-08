@@ -39,13 +39,13 @@ const reloadFavoritesFromServer = async (url) => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
     ReactDOM.render(
-        <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
+        <FavoriteVidoes favorites={data.videos} />, document.querySelector("#favoriteVideos")
     );
 };
 const reloadWatchedFromServer = async () => {
     const response = await fetch('/getWatchedVideos');
     const data = await response.json();
-    ReactDOM.render(<WatchedVideos watched={data.watched} />, document.querySelector("#recentlyWatched"));
+    ReactDOM.render(<WatchedVideos watched={data.videos} />, document.querySelector("#recentlyWatched"));
 };
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
