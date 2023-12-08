@@ -10,7 +10,6 @@ const getVideos = async (req, res) => {
   try {
     const docs = await Video.find();
     const premiumStatus = req.session.account.premium;
-    console.log(premiumStatus);
     return res.json({ videos: docs, premiumStatus });
   } catch (err) {
     console.log(err);

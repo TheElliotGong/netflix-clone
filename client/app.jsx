@@ -1,31 +1,34 @@
 const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
-
+/**
+ * This helper function assists with managing the favorite videos under the user profile.
+ * @param {*} videoID the id of the video being edited.
+ * @param {*} action the action to take on the video.
+ * @returns 
+ */
 const handleFavorites = (videoID, action) => {
-    
+        //Ensure the videoID is valid.
         if (!videoID) {
-            // helper.handleError('Name is required!');
             return false;
         }
-        console.log(videoID);
         helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
         return false;
     }
+//This is the button that adds a video to the favorites list.
 const AddToFavoritesButton = (props) => {
     return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
 };
-
+//This is the button that removes a video from the favorites list.
 const RemoveFromFavoritesButton = (props) => {
     return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/removeFromFavorites');}}>Remove from Favorites</button>
 };
-
+/**
+ * This function reloads the favorite videos from the selected user profile.
+ */
 const reloadFavoritesFromServer = async () => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
-
-    //Render the domos under the selected html element.
-
     ReactDOM.render(
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
@@ -51,8 +54,11 @@ const getProfiles = async () => {
     );
 
 };
-
+/**
+ * This function loads the videos from the server.
+ */
 const loadVideos = async () => {
+    //Fill out the popular and trending sections
     const response = await fetch('/getVideos');
     const data = await response.json();  
     ReactDOM.render(
@@ -61,6 +67,7 @@ const loadVideos = async () => {
     ReactDOM.render(
         <Videos videos={data.videos} />, document.querySelector("#trending")
     );  
+    //Fill out the exclusive section if the user is a premium member.
     if(data.premiumStatus)
     {
         ReactDOM.render(<Videos videos={data.videos} />, document.querySelector("#exclusive"));
