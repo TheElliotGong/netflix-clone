@@ -16,6 +16,14 @@ const handleFavorites = (videoID, action) => {
         helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
         return false;
     }
+const handleWatched = (videoID) => {
+        //Ensure the videoID is valid.
+        if (!videoID) {
+            return false;
+        }
+        helper.sendPost('/addToWatched', { videoID }, reloadWatchedFromServer);
+        return false;
+    };
 //This is the button that adds a video to the favorites list.
 const AddToFavoritesButton = (props) => {
     return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
@@ -27,14 +35,18 @@ const RemoveFromFavoritesButton = (props) => {
 /**
  * This function reloads the favorite videos from the selected user profile.
  */
-const reloadFavoritesFromServer = async () => {
+const reloadFavoritesFromServer = async (url) => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
     ReactDOM.render(
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
 };
-
+const reloadWatchedFromServer = async () => {
+    const response = await fetch('/getWatchedVideos');
+    const data = await response.json();
+    ReactDOM.render(<WatchedVideos watched={data.watched} />, document.querySelector("#recentlyWatched"));
+};
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
         return <button className='profile' onClick = {(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}}>
@@ -85,13 +97,21 @@ const loadFavoriteVideos = async () => {
         <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
     );
 }
+const loadWatchedVideos = async () => {
+    const response = await fetch('/getWatchedVideos');
+    const data = await response.json();
+    ReactDOM.render(
+        <WatchedVideos watched={data.watched}/>, document.querySelector("#recentlyWatched")
+    );
+};
 
 
 const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
-            <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
-            {/* <ReactPlayer url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" /> */}
+            <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video._id);}}>
+                <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            </button>
             <p className='name' >{video.name}</p>
             <p className='genre' >{video.genre}</p>
             <div className = "buttonContainer">
@@ -103,6 +123,28 @@ const Videos = (props) => {
     return (<div className="videoList">
         {videoNodes}
     </div>);
+};
+const WatchedVideos = (props) => {
+    if(props.watched.length === 0)
+    {
+        return(
+            <div className="watchedVideoList">
+                <h3 className="noWatched">No Watched Videos yet</h3>
+            </div>
+        );
+    }
+    const videoNodes = props.watched.map(video => {
+        return <div id={video._id} className='watchedVideo'>
+            <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            <p className='name' >{video.name}</p>
+            <p className='genre' >{video.genre}</p>
+            <div className = "buttonContainer">
+                <AddToFavoritesButton videoID = {video._id} />
+            </div>
+        </div>});
+    return (<div className="videoList">
+    {videoNodes}
+</div>);
 };
 const FavoriteVidoes = (props) => {
     if(props.favorites.length === 0)
@@ -138,6 +180,8 @@ const init = () => {
     getProfiles();
     loadVideos();
     loadFavoriteVideos();
+    loadWatchedVideos();
+    
 
 };
 

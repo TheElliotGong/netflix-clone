@@ -118,6 +118,11 @@ p
     height: fit-content;
     display: block;
 }
+.videoPlayer
+{
+    background: none;
+    border: none;
+}
 .thumbnail
 {
     width: 20vw;
