@@ -1,5 +1,6 @@
 const helper = require('./helper.js');
 const React = require('react');
+
 const ReactDOM = require('react-dom');
 /**
  * This helper function assists with managing the favorite videos under the user profile.
@@ -90,6 +91,7 @@ const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
             <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            {/* <ReactPlayer url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" /> */}
             <p className='name' >{video.name}</p>
             <p className='genre' >{video.genre}</p>
             <div className = "buttonContainer">

@@ -15,6 +15,11 @@ const ProfileSchema = new mongoose.Schema({
     required: false,
     ref: 'Video',
   },
+  watched:{
+    type: [mongoose.Schema.ObjectId],
+    required: false,
+    ref: 'Video',
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,

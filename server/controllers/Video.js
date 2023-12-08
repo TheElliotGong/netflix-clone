@@ -8,7 +8,9 @@ const contentPage = async (req, res) => {
 };
 const getVideos = async (req, res) => {
   try {
-    const docs = await Video.find();
+    const docs = await Video.aggregate([
+      { $sample: { size: 10 } }
+    ]);
     const premiumStatus = req.session.account.premium;
     return res.json({ videos: docs, premiumStatus });
   } catch (err) {
@@ -17,17 +19,32 @@ const getVideos = async (req, res) => {
   }
 };
 
-const getFavoriteVideos = async (req, res) => {
+const getSpecialVideos = async (req, res) => {
   try {
     const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
-    const docs = await Video.find({ _id: { $in: profile.favorites } }).lean().exec();
+    let docs;
+    if (req.url === '/getFavoriteVideos') {
+      docs = await Video.find({ _id: { $in: profile.favorites } }).lean().exec();
+    }
+    else if (req.url === '/getWatchedVideos') {
+      docs = await Video.find({ _id: { $in: profile.watched } }).lean().exec();
+    }
     return res.json({ favorites: docs });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
-
+const getWatchedVideos = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
+    const docs = await Video.find({ _id: { $in: profile.watched } }).lean().exec();
+    return res.json({ watched: docs });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured' });
+  }
+};
 const addToFavorites = async (req, res) => {
   try {
     const { videoID } = req.body;
@@ -62,5 +79,5 @@ const removeFromFavorites = async (req, res) => {
 };
 
 module.exports = {
-  contentPage, getVideos, getFavoriteVideos, addToFavorites, removeFromFavorites,
+  contentPage, getVideos, getSpecialVideos, getWatchedVideos, addToFavorites, removeFromFavorites,
 };
