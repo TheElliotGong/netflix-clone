@@ -39,13 +39,14 @@ const createProfileForm = () => {
 
 const Profiles = (props) => {
 
-    
+
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <button onClick={(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}} className='profile' >
+            return(<button onClick={(e) => { e.preventDefault(); helper.handleLoadProfile(profile.name); }} className='profile' >
+
                 < img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
                 <h2 className='name' >{profile.name}</h2>
-            </button>
+            </button>);
         });
         return (
             <div className="profiles">
@@ -53,7 +54,7 @@ const Profiles = (props) => {
                 <div id="profileRow">
                     {profileNodes}
                 </div>
-                <a id = "manageProfilesButton" href="/manageProfiles" onClick={(e) => {
+                <a id="manageProfilesButton" href="/manageProfiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<ManageProfiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -65,7 +66,7 @@ const Profiles = (props) => {
         return (
             <div className="profiles">
                 <h1>No Profiles Yet</h1>
-                <a id = "manageProfilesButton" href="/manageProfiles" onClick={(e) => {
+                <a id="manageProfilesButton" href="/manageProfiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<ManageProfiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -81,11 +82,13 @@ const ManageProfiles = (props) => {
 
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
-            return <div key={profile._id} className='profile'>
-                <button className = 'manageProfile'>< img src='/assets/img/netflix-avatar.png' alt='avatar' className='avatar' />
-                <h2 className='name' >{profile.name}</h2></button>
-                
-            </div>
+            return(
+                <button className='manageProfile'>
+                    <div className='manageAvatar'>
+                        <img src="/assets/img/pencil.png" className="pencil-icon" />
+                    </div>
+                    <h2 className='name' >{profile.name}</h2></button>);
+            
         });
 
         return (
@@ -96,7 +99,7 @@ const ManageProfiles = (props) => {
                 </div>
 
                 {createProfileForm()}
-                <a id = "doneButton" href="/profiles" onClick={(e) => {
+                <a id="doneButton" href="/profiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<Profiles profiles={props.profiles} />, document.querySelector("#profileContent"));
@@ -109,7 +112,7 @@ const ManageProfiles = (props) => {
             <div className="profiles">
                 <h1>No Profiles Yet</h1>
                 {createProfileForm()}
-                <a id = "doneButton" href="/profiles" onClick={(e) => {
+                <a id="doneButton" href="/profiles" onClick={(e) => {
                     e.preventDefault();
 
                     ReactDOM.render(<Profiles profiles={props.profiles} />, document.querySelector("#profileContent"));

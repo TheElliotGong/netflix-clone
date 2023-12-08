@@ -14,7 +14,7 @@ html, body {
     width: fit-content;
     height: fit-content;
     margin: auto;
-    margin-top: 150px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -31,11 +31,26 @@ html, body {
 {
     margin-left: 50px;
 }
-img.avatar {
-    margin: 0 auto 10px;
+.avatar, .manageAvatar {
+    margin: 0 auto;
     height: 100px;
     width: 100px;
     border-radius: 4px;
+    
+}
+
+.manageAvatar
+{
+    background-image: url('/assets/img/netflix-avatar.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.pencil-icon
+{
+    width: 40%;
+    height: 40%;
+    margin: 30% auto;
 }
 h1
 {
@@ -43,19 +58,9 @@ h1
     font-size: 4vw;
     
 }
-#manageProfiles
+.manageAvatar:hover
 {
-    border: 1px solid rgb(194, 194, 194);
-    color:rgb(194, 194, 194);
-    font-size: larger;
-    width: 200px;
-    height: 60px;
-    background-color: rgba(35, 35, 35, 1);
-
-}
-#manageProfiles:hover
-{
-    border: 3px solid white;
+    border: 2px solid white;
     color: white;
 }
 #profileRow
@@ -71,7 +76,8 @@ h1
     border: none;
     color: rgb(202, 202, 202);
 }
-.profile:hover, #manageProfilesButton:hover
+
+.profile:hover, #manageProfilesButton:hover, .manageProfile:hover
 {
     cursor:pointer;
     color:white;

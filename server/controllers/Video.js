@@ -3,7 +3,6 @@ const models = require('../models');
 const { Video } = models;
 const { Profile } = models;
 
-
 const contentPage = async (req, res) => {
   res.render('app');
 };
