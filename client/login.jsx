@@ -8,13 +8,13 @@ const ReactDOM = require('react-dom');
  */
 const handleLogin = (e) => {
     e.preventDefault();
-    // helper.hideError();
+    helper.hideError();
     //Get username and password from form and see if they're valid.
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
 
     if (!username || !pass) {
-        // helper.handleError('Username or password is empty.');
+        helper.handleError('Username or password is empty.');
         return false;
     }
     //Send post request with data.
@@ -28,7 +28,7 @@ const handleLogin = (e) => {
  */
 const handleSignup = (e) => {
     e.preventDefault();
-    // helper.hideError();
+    helper.hideError();
     //Get username and password from form and see if they're valid.
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
@@ -36,12 +36,12 @@ const handleSignup = (e) => {
     const premium = e.target.querySelector('#premium').checked;
     //Make sure all fields are filled in.
     if (!username || !pass || !pass2) {
-        // helper.handleError('All fields are required.');
+        helper.handleError('All fields are required.');
         return false;
     }
     //Make sure passwords match.
     if (pass !== pass2) {
-        // helper.handleError('Passwords do not match.');
+        helper.handleError('Passwords do not match.');
         return false;
     }
     //Send post request with data.
@@ -53,61 +53,62 @@ const handleSignup = (e) => {
 
 /**
  * This function creates the login form for the domo maker.
- * @param {*} props 
  * @returns 
  */
-const LoginWindow = (props) => {
+const LoginWindow = () => {
     return (
-        <div className = "formWindow">
-            
-           <form id="loginForm" name="loginForm" onSubmit={handleLogin} action="/login" method="POST" className="mainForm">
-            <h1>Sign In</h1>
-            <input id="user" type="text" name="username" placeholder="Username" />
+        <div className="formWindow">
 
-            <input id="pass" type="password" name="pass" placeholder="Password" />
-            <input className="formSubmit" type="submit" value="Sign In" />
+            <form id="loginForm" name="loginForm" onSubmit={handleLogin} action="/login" method="POST" className="mainForm">
+                <h1>Sign In</h1>
+                <input id="user" type="text" name="username" placeholder="Username" />
+                
+                <input id="pass" type="password" name="pass" placeholder="Password" />
+                <input className="formSubmit" type="submit" value="Sign In" />
+                <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
+            </form>
+            <div id="signUp">
+                New to Netflix? <a id="signupButton" href="/signup" onClick={(e) => {
+                    e.preventDefault();
+                    ReactDOM.render(<SignupWindow />, document.querySelector('#content'));
+                }}><strong>Sign up now</strong>.</a>
+            </div>
 
-        </form> 
-        <div id = "signUp">
-            New to Netflix? <a id="signupButton" href="/signup" onClick={(e) => {e.preventDefault();
-         ReactDOM.render(<SignupWindow />, document.querySelector('#content')); }}><strong>Sign up now</strong>.</a>
         </div>
-        
-        </div>
-        
-        
+
+
     );
 };
 /**
  * This function creates the signup form for the domo maker.
- * @param {*} props 
  * @returns 
  */
-const SignupWindow = (props) => {
-    
+const SignupWindow = () => {
+
     return (
-        <div className = "formWindow">
-           <form id="signupForm" onSubmit={handleSignup} action="/signup" method="POST" className='mainForm'>
-            <h1>Sign Up</h1>
-            <label htmlFor='username'>Username: </label>
-            <input id="user" type="text" name="username" placeholder="Username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="Password" />
-            <label htmlFor="pass2">Re-enter Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="Re-enter Password" />
-            <label htmlFor="premium">Premium: </label>
-            <input id = "premium" type = "checkbox"/>
-            <input className="formSubmit" type="submit" value="Sign Up" />
-        </form> 
-        <div id = "login">
-            Already have an account? <a id="loginButton" href="/login" onClick={(e) => {e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content'));}}><strong>Log In</strong></a>
+        <div className="formWindow">
+            <form id="signupForm" onSubmit={handleSignup} action="/signup" method="POST" className='mainForm'>
+                <h1>Sign Up</h1>
+                <label htmlFor='username'>Username: </label>
+                <input id="user" type="text" name="username" placeholder="Username" />
+                <label htmlFor="pass">Password: </label>
+                <input id="pass" type="password" name="pass" placeholder="Password" />
+                <label htmlFor="pass2">Re-enter Password: </label>
+                <input id="pass2" type="password" name="pass2" placeholder="Re-enter Password" />
+                <label htmlFor="premium">Premium: </label>
+                <input id="premium" type="checkbox" />
+                <input className="formSubmit" type="submit" value="Sign Up" />
+                <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
+            </form>
+            <div id="login">
+                Already have an account? <a id="loginButton" href="/login" onClick={(e) => { e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content')); }}><strong>Log In</strong></a>
+            </div>
+
         </div>
-        
-        </div>
-        
-        
+
+
     );
 };
 
 
-window.onload = () => {ReactDOM.render(<LoginWindow />, document.querySelector('#content'));};
+window.onload = () => { ReactDOM.render(<LoginWindow />, document.querySelector('#content')); };

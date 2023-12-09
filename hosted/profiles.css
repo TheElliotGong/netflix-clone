@@ -109,3 +109,16 @@ h1
 {
     background-color: rgb(228, 228, 228);
 }
+.warning
+{color: rgb(255, 128, 0);
+
+}
+#createProfileForm
+{
+    width: fit-content;
+    margin: 0 auto;
+}
+.formSubmit, #profileName
+{
+    margin-left: 15px;
+}

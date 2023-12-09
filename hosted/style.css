@@ -36,6 +36,8 @@ nav:nth-child(1) {
 
 .mainForm h3 {
     text-align: center;
+    color: rgb(255, 128, 0);
+    
 }
 .formWindow a {
     text-decoration: none;
@@ -96,9 +98,9 @@ nav:nth-child(1) {
 
 #content
 {
-    height: 500px;
+    height: fit-content;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 90px;
     padding: 25px;
     width: 340px;
     background-color: rgba(0, 0, 0, 0.8);

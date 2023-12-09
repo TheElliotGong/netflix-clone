@@ -11,11 +11,10 @@ const ReactDOM = require('react-dom');
  */
 const handleProfileCreation = (e) => {
     e.preventDefault();
-
+    helper.hideError();
     const name = e.target.querySelector('#profileName').value;
-    console.log(name);
     if (!name) {
-        // helper.handleError('Name is required!');
+        helper.handleError('Name is required!');
         return false;
     }
     helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
@@ -33,6 +32,7 @@ const createProfileForm = () => {
             <label htmlFor='profileName'>Name: </label>
             <input id="profileName" type="text" name="profileName" placeholder="Name" />
             <input className="formSubmit" type="submit" value="Create Profile" />
+            <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
         </form>
     </div>
 };
@@ -122,6 +122,7 @@ const ManageProfiles = (props) => {
             <div className="profiles">
                 <h1>No Profiles Yet</h1>
                 {createProfileForm()}
+                
                 <a id="doneButton" href="/profiles" onClick={(e) => {
                     e.preventDefault();
 

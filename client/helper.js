@@ -1,5 +1,8 @@
 
-
+  const hideError = () => {document.querySelector(".warning").classList.add('hidden');};
+  const handleError = (message) => {
+    document.querySelector(".warning").classList.remove('hidden');
+    document.querySelector(".errorMessage").textContent = message;};
   const sendPost = async (url, data, handler) => {
     const response = await fetch(url, {
       method: 'POST',
@@ -10,14 +13,14 @@
     });
   
     const result = await response.json();
-    // document.getElementById('domoMessage').classList.add('hidden');
+    document.querySelector('.warning').classList.add('hidden');
   
     if(result.redirect) {
       window.location = result.redirect;
     }
   
     if(result.error) {
-      // handleError(result.error);
+      handleError(result.error);
     }
     if(handler)
     {
@@ -35,4 +38,4 @@
     return false;
 }
 
-  module.exports = { sendPost, handleLoadProfile};
+  module.exports = { sendPost, handleLoadProfile, hideError, handleError};
