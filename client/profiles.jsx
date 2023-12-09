@@ -18,15 +18,15 @@ const handleProfileCreation = (e) => {
         // helper.handleError('Name is required!');
         return false;
     }
-
     helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
-
-
     return false;
 };
 
 
-
+/**
+ * This react component creates the form for creating a new profile.
+ * @returns 
+ */
 const createProfileForm = () => {
     return <div>
         <form id="createProfileForm" onSubmit={handleProfileCreation} action='/createProfile' method="POST">
@@ -36,10 +36,14 @@ const createProfileForm = () => {
         </form>
     </div>
 };
-
+/**
+ * This react component creates the profile buttons for the profiles page.
+ * @param {*} props 
+ * @returns 
+ */
 const Profiles = (props) => {
 
-
+    //Render the UI for each profile.
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return(<button onClick={(e) => { e.preventDefault(); helper.handleLoadProfile(profile.name); }} className='profile' >
@@ -62,6 +66,7 @@ const Profiles = (props) => {
             </div>
         );
     }
+    //Return a simple message if the account has no profiles.
     else {
         return (
             <div className="profiles">
@@ -77,7 +82,11 @@ const Profiles = (props) => {
     }
 
 };
-
+/**
+ * This react component creates the buttons for managing existing profiles.
+ * @param {*} props 
+ * @returns 
+ */
 const ManageProfiles = (props) => {
 
     if (props.profiles.length > 0) {
@@ -107,6 +116,7 @@ const ManageProfiles = (props) => {
             </div>
         );
     }
+    //Return a simple message if the account has no profiles to manage.
     else {
         return (
             <div className="profiles">

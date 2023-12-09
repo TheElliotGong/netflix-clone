@@ -19,11 +19,17 @@ const getVideos = async (req, res) => {
     return res.status(500).json({ error: 'An error occured' });
   }
 };
-
+/**
+ * This function returns the watched or favorite videos under the currently open profile.
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 const getSpecialVideos = async (req, res) => {
   try {
     const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
     let docs;
+    // Return different videos depending on the request url
     if (req.url === '/getFavoriteVideos') {
       docs = await Video.find({ _id: { $in: profile.favorites } }).lean().exec();
     }
@@ -35,10 +41,17 @@ const getSpecialVideos = async (req, res) => {
     return res.status(500).json({ error: 'An error occured' });
   }
 };
+/**
+ * This function adds a video to the open profile's favorites or watched lists.
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 const addSpecialVideo = async (req, res) => {
   try {
     const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
+    // See if the video already exists in the favorites or watched list
     if (req.url === '/addToFavorites') {
       if (profile.favorites.includes(videoID)) {
         return res.status(409).json({ message: 'Video already in Favorites' });
@@ -61,9 +74,15 @@ const addSpecialVideo = async (req, res) => {
     return res.status(500).json({ error: 'An error occured' });
   }
 };
-
+/**
+ * This function removes a video from the open profile's favorites list.
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 const removeFromFavorites = async (req, res) => {
   try {
+    // Check if video is in favorites and remove it if it is there.
     const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
     if (!profile.favorites.includes(videoID)) {

@@ -16,6 +16,11 @@ const handleFavorites = (videoID, action) => {
         helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
         return false;
     }
+/**
+ * This helper function assists with managing the watched videos under the user profile.
+ * @param {*} videoID 
+ * @returns 
+ */
 const handleWatched = (videoID) => {
         //Ensure the videoID is valid.
         if (!videoID) {
@@ -35,18 +40,26 @@ const RemoveFromFavoritesButton = (props) => {
 /**
  * This function reloads the favorite videos from the selected user profile.
  */
-const reloadFavoritesFromServer = async (url) => {
+const reloadFavoritesFromServer = async () => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
     ReactDOM.render(
         <FavoriteVidoes favorites={data.videos} />, document.querySelector("#favoriteVideos")
     );
 };
+/**
+ * This function reloads the watched videos from the selected user profile.
+ */
 const reloadWatchedFromServer = async () => {
     const response = await fetch('/getWatchedVideos');
     const data = await response.json();
     ReactDOM.render(<WatchedVideos watched={data.videos} />, document.querySelector("#recentlyWatched"));
 };
+/**
+ * This function loads in the profiles associated with the logged in account.
+ * @param {*} props 
+ * @returns 
+ */
 const ProfileList = (props) => {
     const profileNodes = props.profiles.map(profile => {
         return <button className='profile' onClick = {(e)=>{e.preventDefault();helper.handleLoadProfile(profile.name);}}>
@@ -58,14 +71,15 @@ const ProfileList = (props) => {
         {profileNodes}
     </div>);
 };
-
+/**
+ * This function retrieves the profiles associated with the logged in account.
+ */
 const getProfiles = async () => {
     const response = await fetch('/getProfiles');
     const data = await response.json();
     ReactDOM.render(
         <ProfileList profiles={data.profiles} />, document.querySelector("#profiles")
     );
-
 };
 /**
  * This function loads the videos from the server.
@@ -82,30 +96,37 @@ const loadVideos = async () => {
     );  
     //Fill out the exclusive section if the user is a premium member.
     if(data.premiumStatus)
-    {
-        ReactDOM.render(<Videos videos={data.videos} />, document.querySelector("#exclusive"));
-    }
+    {ReactDOM.render(<Videos videos={data.videos} />, document.querySelector("#exclusive"));}
     else
-    {
-        ReactDOM.render(<h3 className="exclusiveMessage">Become a premium member to access exclusive content</h3>, document.querySelector("#exclusive"));
-    }
+    {ReactDOM.render(<h3 className="exclusiveMessage">Become a premium member to access exclusive content</h3>, document.querySelector("#exclusive"));}
 }
+/**
+ * This function loads the favorite videos from the server.
+ */
 const loadFavoriteVideos = async () => {
     const response = await fetch('/getFavoriteVideos');
     const data = await response.json();
     ReactDOM.render(
-        <FavoriteVidoes favorites={data.favorites} />, document.querySelector("#favoriteVideos")
+        <FavoriteVidoes favorites={data.videos} />, document.querySelector("#favoriteVideos")
     );
 }
+/**
+ * This function loads the watched videos from the server.
+ 
+ */
 const loadWatchedVideos = async () => {
     const response = await fetch('/getWatchedVideos');
     const data = await response.json();
     ReactDOM.render(
-        <WatchedVideos watched={data.watched}/>, document.querySelector("#recentlyWatched")
+        <WatchedVideos watched={data.videos}/>, document.querySelector("#recentlyWatched")
     );
 };
 
-
+/**
+ * This is the function that loads unwatched videos into the page.
+ * @param {*} props 
+ * @returns 
+ */
 const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
@@ -124,6 +145,11 @@ const Videos = (props) => {
         {videoNodes}
     </div>);
 };
+/**
+ * This function loads watched videos onto the page.
+ * @param {*} props 
+ * @returns 
+ */
 const WatchedVideos = (props) => {
     if(props.watched.length === 0)
     {
@@ -146,6 +172,11 @@ const WatchedVideos = (props) => {
     {videoNodes}
 </div>);
 };
+/**
+ * This function creates 
+ * @param {*} props 
+ * @returns 
+ */
 const FavoriteVidoes = (props) => {
     if(props.favorites.length === 0)
     {
@@ -157,7 +188,9 @@ const FavoriteVidoes = (props) => {
     }
     const videoNodes = props.favorites.map(video => {
         return <div id={video._id} className='favoriteVideo'>
-            <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video._id);}}>
+                <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
+            </button>
             <p className='name' >{video.name}</p>
             <p className='name' >{video.genre}</p>
             <div className = "buttonContainer">
