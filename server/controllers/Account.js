@@ -106,7 +106,7 @@ const changePassword = async (req, res) => {
   // Check if the current password is verified.
   const passwordVerification = await bcrypt.compare(currentPass, account.password);
   if (!passwordVerification) {
-    return res.status(400).json({ error: 'You must verify your current password' });
+    return res.status(400).json({ error: 'You must enter your current password' });
   }
   // Check if user is trying to change password to the same password.
   if (pass === currentPass) {

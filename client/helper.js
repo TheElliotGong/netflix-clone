@@ -13,7 +13,11 @@
     });
   
     const result = await response.json();
-    document.querySelector('.warning').classList.add('hidden');
+    if(document.querySelector('.warning'))
+    {
+      document.querySelector('.warning').classList.add('hidden');
+    }
+    
   
     if(result.redirect) {
       window.location = result.redirect;

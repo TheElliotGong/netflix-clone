@@ -9,7 +9,7 @@ const ReactDOM = require('react-dom');
  */
 const handlePasswordChange = (e) => {
     e.preventDefault();
-    // helper.hideError();
+    helper.hideError();
     //Get the passwords from the form.
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
@@ -17,11 +17,11 @@ const handlePasswordChange = (e) => {
     //Ensure all fields are filled in and new password is valid.
     if(!pass || !pass2)
     {
-        // helper.handleError('All fields are required.');
+        helper.handleError('All fields are required.');
         return false;
     }
     if (pass !== pass2) {
-        // helper.handleError('Passwords do not match.');
+        helper.handleError('Passwords do not match.');
         return false;
     }
     helper.sendPost(e.target.action, {pass, pass2, currentPass });
@@ -34,15 +34,20 @@ const handlePasswordChange = (e) => {
  */
 const ChangePasswordWindow = (props) => {
     return (
-        <form id="changePasswordForm" onSubmit={handlePasswordChange} action='/changePassword' method="POST">
+        <div className="formWindow">
+            <h1>Change Password</h1>
+        <form id="changePasswordForm" onSubmit={handlePasswordChange} action='/changePassword' method="POST" className = "mainForm">
             <label htmlFor='currentPass'>Current Password: </label>
             <input id="currentPass" type="password" name="currentPass" placeholder="Current Password" />
             <label htmlFor="pass">New Password: </label>
             <input id="pass" type="password" name="pass" placeholder="New Password" />
             <label htmlFor="pass">Re-enter New Password: </label>
             <input id="pass2" type="password" name="pass2" placeholder="Re-enter New Password" />
+            
             <input className="formSubmit" type="submit" value="Change Password" />
-        </form>);
+            <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
+        </form>
+        </div>);
 };
 /**
  * Add react component to page.
