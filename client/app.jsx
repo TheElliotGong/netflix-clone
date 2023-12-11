@@ -151,6 +151,7 @@ const Videos = (props) => {
  * @returns 
  */
 const WatchedVideos = (props) => {
+    //If there are no watched videos, display a message.
     if(props.watched.length === 0)
     {
         return(
@@ -178,6 +179,7 @@ const WatchedVideos = (props) => {
  * @returns 
  */
 const FavoriteVidoes = (props) => {
+    //If there are no favorite videos, display a message.
     if(props.favorites.length === 0)
     {
         return(
@@ -209,13 +211,10 @@ const FavoriteVidoes = (props) => {
  * Initializes the page.
  */
 const init = () => {
-    
     getProfiles();
     loadVideos();
     loadFavoriteVideos();
     loadWatchedVideos();
-    
-
 };
 
 window.onload = init;

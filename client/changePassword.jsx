@@ -34,6 +34,7 @@ const handlePasswordChange = (e) => {
  */
 const ChangePasswordWindow = (props) => {
     return (
+        //Create the form.
         <div className="formWindow">
             <h1>Change Password</h1>
         <form id="changePasswordForm" onSubmit={handlePasswordChange} action='/changePassword' method="POST" className = "mainForm">
@@ -44,8 +45,6 @@ const ChangePasswordWindow = (props) => {
                 <input className="formSubmit" type="submit" value="Change Password" id = "changePasswordButton"/>
                 <a href = "/content" className = "cancel">Cancel</a>
             </div>
-            
-
             <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
         </form>
         </div>);

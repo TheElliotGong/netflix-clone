@@ -2,8 +2,6 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-
-
 /**
  * This form only runs when creating a new profile, which should update the manage profiles page on completion.
  * @param {*} e 
@@ -13,10 +11,12 @@ const handleProfileCreation = (e) => {
     e.preventDefault();
     helper.hideError();
     const name = e.target.querySelector('#profileName').value;
+    //Check for errors.
     if (!name) {
         helper.handleError('Name is required!');
         return false;
     }
+    //Otherwise, send the post request.
     helper.sendPost(e.target.action, { name }, reloadProfilesFromServer);
     return false;
 };
@@ -88,7 +88,7 @@ const Profiles = (props) => {
  * @returns 
  */
 const ManageProfiles = (props) => {
-
+    //Display the Editing UI for each profile.
     if (props.profiles.length > 0) {
         const profileNodes = props.profiles.map(profile => {
             return(
@@ -130,17 +130,13 @@ const ManageProfiles = (props) => {
                 }}>Done</a>
             </div>
         );
-
     }
 };
-
 
 const reloadProfilesFromServer = async () => {
     const response = await fetch('/getProfiles');
     const data = await response.json();
-
     //Render the domos under the selected html element.
-
     ReactDOM.render(
         <ManageProfiles profiles={data.profiles} />, document.querySelector("#profileContent")
     );
@@ -149,15 +145,10 @@ const reloadProfilesFromServer = async () => {
 const init = async () => {
     const response = await fetch('/getProfiles');
     const data = await response.json();
-
     //Render the domos under the selected html element.
-
     ReactDOM.render(
         <Profiles profiles={data.profiles} />, document.querySelector("#profileContent")
     );
 };
-
-
-
 
 window.onload = init;

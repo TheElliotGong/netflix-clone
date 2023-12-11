@@ -1,5 +1,5 @@
+//Import necessary content
 const models = require('../models');
-
 const { Profile } = models;
 const { Account } = models;
 // Render the profiles page.
@@ -75,6 +75,7 @@ const createProfile = async (req, res) => {
     await account.save();
     return res.status(201).json({ name: newProfile.name, owner: newProfile.owner });
   } catch (err) {
+    //Catch and print errors.
     console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Profile name is taken.' });

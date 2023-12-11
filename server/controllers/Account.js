@@ -1,6 +1,6 @@
+//Import necessary content
 const bcrypt = require('bcrypt');
 const models = require('../models');
-
 const { Account } = models;
 /**
  * Render the login page.
@@ -112,7 +112,6 @@ const changePassword = async (req, res) => {
   if (pass === currentPass) {
     return res.status(400).json({ error: 'New password cannot be the same as old password' });
   }
-
   try {
     // Locate account attached to current session, and change password.
     const newHash = await Account.generateHash(pass);

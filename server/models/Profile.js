@@ -3,7 +3,7 @@ const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
 let ProfileModel = {};
-//Define profile schema
+// Define profile schema
 const ProfileSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -31,12 +31,12 @@ const ProfileSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-//Hep store profile in redis
+// Hep store profile in redis
 ProfileSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   _id: doc._id,
 });
-//Authenticate profile when needed
+// Authenticate profile when needed
 ProfileSchema.statics.authenticate = async (name, callback) => {
   try {
     const doc = await ProfileModel.findOne({ name }).exec();

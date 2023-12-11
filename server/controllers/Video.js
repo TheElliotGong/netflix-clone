@@ -1,11 +1,17 @@
+//Import necessary content
 const models = require('../models');
-
 const { Video } = models;
 const { Profile } = models;
 // Render the main content page.
 const contentPage = async (req, res) => {
   res.render('app');
 };
+/**
+ * This function gets all the video documents stored in the mongodb database.
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const getVideos = async (req, res) => {
   try {
     // Get all videos from the database.
@@ -27,7 +33,7 @@ const getSpecialVideos = async (req, res) => {
   try {
     const profile = await Profile.findOne({ _id: req.session.profile._id }).lean().exec();
     let docs;
-    // Return different videos depending on the request url
+    // Return different types of videos depending on the request url
     if (req.url === '/getFavoriteVideos') {
       docs = await Video.find({ _id: { $in: profile.favorites } }).lean().exec();
     }
