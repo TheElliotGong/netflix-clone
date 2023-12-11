@@ -56,17 +56,18 @@ const handleSignup = (e) => {
  * @returns 
  */
 const LoginWindow = () => {
+    //Add Sign Up button at bottom.
     return (
         <div className="formWindow">
 
             <form id="loginForm" name="loginForm" onSubmit={handleLogin} action="/login" method="POST" className="mainForm">
                 <h1>Sign In</h1>
                 <input id="user" type="text" name="username" placeholder="Username" />
-                
                 <input id="pass" type="password" name="pass" placeholder="Password" />
                 <input className="formSubmit" type="submit" value="Sign In" />
                 <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
             </form>
+            
             <div id="signUp">
                 New to Netflix? <a id="signupButton" href="/signup" onClick={(e) => {
                     e.preventDefault();
@@ -84,7 +85,7 @@ const LoginWindow = () => {
  * @returns 
  */
 const SignupWindow = () => {
-
+    //Add Sign In button at bottom.
     return (
         <div className="formWindow">
             <form id="signupForm" onSubmit={handleSignup} action="/signup" method="POST" className='mainForm'>

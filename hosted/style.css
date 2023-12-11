@@ -77,7 +77,7 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #c40000;
 }
 
 #user, #pass, #pass2 , #currentPass{
@@ -86,8 +86,12 @@ nav:nth-child(1) {
     width: 100%;
     height: 40px;
     border-radius: 6px;
+    border: 2px solid rgb(118, 118, 118);
+    color: white;
     margin: 0 auto;
     margin-bottom: 25px;
+    background-color: rgba(0, 0, 0, 0.75);
+    
 }
 
 #user:focus, #pass:focus, #pass2:focus , #currentPass:focus{

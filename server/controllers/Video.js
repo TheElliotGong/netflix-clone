@@ -2,15 +2,13 @@ const models = require('../models');
 
 const { Video } = models;
 const { Profile } = models;
-
+//Render the main content page.
 const contentPage = async (req, res) => {
   res.render('app');
 };
 const getVideos = async (req, res) => {
   try {
-    // const docs = await Video.aggregate([
-    //   { $sample: { size: 10 } }
-    // ]);
+    //Get all videos from the database.
     const docs = await Video.find({}).lean().exec();
     const premiumStatus = req.session.account.premium;
     return res.json({ videos: docs, premiumStatus });
@@ -51,7 +49,7 @@ const addSpecialVideo = async (req, res) => {
   try {
     const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
-    // See if the video already exists in the favorites or watched list
+    // See if the video already exists in the favorites list
     if (req.url === '/addToFavorites') {
       if (profile.favorites.includes(videoID)) {
         return res.status(409).json({ message: 'Video already in Favorites' });
@@ -59,6 +57,7 @@ const addSpecialVideo = async (req, res) => {
       profile.favorites.push(videoID);
       await profile.save();
     }
+    // See if the video already exists in the watched list
     if (req.url === '/addToWatched') {
       if (profile.watched.includes(videoID)) {
         return res.status(409).json({ message: 'Video already in watched' });
@@ -67,8 +66,6 @@ const addSpecialVideo = async (req, res) => {
       await profile.save();
     }
     return res.status(200).json({ message: 'Successful save' });
-
-    // Check if video is already included in favorites
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured' });
