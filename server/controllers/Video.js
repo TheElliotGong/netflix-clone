@@ -2,13 +2,13 @@ const models = require('../models');
 
 const { Video } = models;
 const { Profile } = models;
-//Render the main content page.
+// Render the main content page.
 const contentPage = async (req, res) => {
   res.render('app');
 };
 const getVideos = async (req, res) => {
   try {
-    //Get all videos from the database.
+    // Get all videos from the database.
     const docs = await Video.find({}).lean().exec();
     const premiumStatus = req.session.account.premium;
     return res.json({ videos: docs, premiumStatus });

@@ -2,21 +2,21 @@ const models = require('../models');
 
 const { Profile } = models;
 const { Account } = models;
-//Render the profiles page.
+// Render the profiles page.
 const profilesPage = (req, res) => res.render('profiles');
-//Render the manage profiles page, which is also on the profiles page.
+// Render the manage profiles page, which is also on the profiles page.
 const manageProfilesPage = (req, res) => {
   res.render('profiles');
 };
 /**
  * This function returns the profiles associated with the current account.
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const getProfiles = async (req, res) => {
   try {
-    //Find the profiles associated with the current account.
+    // Find the profiles associated with the current account.
     const query = { owner: req.session.account._id };
     const docs = await Profile.find(query).select('name favorites').lean().exec();
 
@@ -28,16 +28,16 @@ const getProfiles = async (req, res) => {
 };
 /**
  * This function loads the content assoicated with the profile.
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const loadProfile = async (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ error: 'Profile name required' });
   }
-  //Authenticate the profile and load the content page.
+  // Authenticate the profile and load the content page.
   return Profile.authenticate(name, (err, profile) => {
     if (err || !profile) {
       return res.status(401).json({ error: 'Profile unavailable' });
@@ -48,9 +48,9 @@ const loadProfile = async (req, res) => {
 };
 /**
  * This function creates a new profile under the logged in account.
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const createProfile = async (req, res) => {
   if (!req.body.name) {
@@ -67,7 +67,7 @@ const createProfile = async (req, res) => {
     || (account.premium === true && account.profileCount >= 10)) {
       return res.status(400).json({ error: 'Maximum number of profiles reached.' });
     }
-    //Create and save profile.
+    // Create and save profile.
     const newProfile = new Profile(profileData);
     await newProfile.save();
 
