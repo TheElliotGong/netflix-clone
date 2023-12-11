@@ -1,6 +1,7 @@
-//Import necessary content
+// Import necessary content
 const bcrypt = require('bcrypt');
 const models = require('../models');
+
 const { Account } = models;
 /**
  * Render the login page.

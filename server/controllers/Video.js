@@ -1,5 +1,6 @@
-//Import necessary content
+// Import necessary content
 const models = require('../models');
+
 const { Video } = models;
 const { Profile } = models;
 // Render the main content page.
@@ -8,9 +9,9 @@ const contentPage = async (req, res) => {
 };
 /**
  * This function gets all the video documents stored in the mongodb database.
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const getVideos = async (req, res) => {
   try {
