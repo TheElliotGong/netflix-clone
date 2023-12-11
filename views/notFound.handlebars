@@ -13,10 +13,17 @@
        Any variable you pass into res.render will be available by name in the template through
        the curly braces
   -->
-  <h1>404. The url {{page}} was not found</h1>
+  
   
   <!-- links or URLs are always GET resources as they are getting (retrieving) a resource-->
-  <a href="/">Home</a>
+  <nav>
+     <a  href="/"><img id="logo" src="/assets/img/title.png" alt="Netflix Clone logo"/></a>
+  </nav>
+  
+  <section id = "content">
+     <h1>404. The url {{page}} was not found</h1>
+  </section>
+  
 
 </body>
 </html>

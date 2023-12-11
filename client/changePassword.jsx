@@ -37,14 +37,15 @@ const ChangePasswordWindow = (props) => {
         <div className="formWindow">
             <h1>Change Password</h1>
         <form id="changePasswordForm" onSubmit={handlePasswordChange} action='/changePassword' method="POST" className = "mainForm">
-            <label htmlFor='currentPass'>Current Password: </label>
             <input id="currentPass" type="password" name="currentPass" placeholder="Current Password" />
-            <label htmlFor="pass">New Password: </label>
             <input id="pass" type="password" name="pass" placeholder="New Password" />
-            <label htmlFor="pass">Re-enter New Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="Re-enter New Password" />
+            <input id="pass2" type="password" name="pass2" placeholder="Confirm New Password" />
+            <div id = "buttons">
+                <input className="formSubmit" type="submit" value="Change Password" id = "changePasswordButton"/>
+                <a href = "/content" className = "cancel">Cancel</a>
+            </div>
             
-            <input className="formSubmit" type="submit" value="Change Password" />
+
             <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
         </form>
         </div>);

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+//Define video schema
 const VideoSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,7 +12,7 @@ const VideoSchema = new mongoose.Schema({
     trim: true,
   },
 });
-
+//Store video in redis if needed
 VideoSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   genre: doc.genre,

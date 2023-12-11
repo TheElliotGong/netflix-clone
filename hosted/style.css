@@ -39,7 +39,7 @@ nav:nth-child(1) {
     color: rgb(255, 128, 0);
     
 }
-.formWindow a {
+#loginButton, #signupButton {
     text-decoration: none;
     color: white;
     font-size: 1.2em;
@@ -122,7 +122,34 @@ nav:nth-child(1) {
     color: white;
     font-size: xx-large;
 }
-label{
+#buttons
+{
+    display: flex;
+    justify-content: space-between;
+}
+#changePasswordButton
+{
+    width: 60%;
+    margin-top: 0;
+    font-size: large;
+}
+.cancel
+{
+    background-color: white;
+    padding: 14px 20px;
+    margin: 0 auto;
+    width: fit-content;
+    height: fit-content;
+    font-size: large;
+    font-weight: bold;
+    color: rgb(35,35,35);
+    text-decoration: none;
+}
+.cancel:hover
+{
+    background-color: rgb(228, 228, 228);
+}
+label, h1{
     color: white;
 }
 #signUp, #login

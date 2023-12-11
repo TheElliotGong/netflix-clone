@@ -12,7 +12,6 @@ const handleLogin = (e) => {
     //Get username and password from form and see if they're valid.
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
-
     if (!username || !pass) {
         helper.handleError('Username or password is empty.');
         return false;
@@ -46,11 +45,8 @@ const handleSignup = (e) => {
     }
     //Send post request with data.
     helper.sendPost(e.target.action, { username, pass, pass2, premium });
-
     return false;
 };
-
-
 /**
  * This function creates the login form for the domo maker.
  * @returns 
@@ -66,18 +62,14 @@ const LoginWindow = () => {
                 <input id="pass" type="password" name="pass" placeholder="Password" />
                 <input className="formSubmit" type="submit" value="Sign In" />
                 <h3 className = "warning hidden"><span className = "errorMessage"></span></h3>
-            </form>
-            
+            </form>           
             <div id="signUp">
                 New to Netflix? <a id="signupButton" href="/signup" onClick={(e) => {
                     e.preventDefault();
                     ReactDOM.render(<SignupWindow />, document.querySelector('#content'));
                 }}><strong>Sign up now</strong>.</a>
             </div>
-
         </div>
-
-
     );
 };
 /**
@@ -104,12 +96,8 @@ const SignupWindow = () => {
             <div id="login">
                 Already have an account? <a id="loginButton" href="/login" onClick={(e) => { e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content')); }}><strong>Log In</strong></a>
             </div>
-
         </div>
-
-
     );
 };
-
 
 window.onload = () => { ReactDOM.render(<LoginWindow />, document.querySelector('#content')); };
