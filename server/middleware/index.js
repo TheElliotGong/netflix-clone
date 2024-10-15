@@ -42,10 +42,15 @@ const requiresSecure = (req, res, next) => {
   }
   return next();
 };
-
-// const bypassSecure = (req, res, next) => {
-//   next();
-// };
+/**
+ * Bypass the https check for the client.
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+const bypassSecure = (req, res, next) => {
+  next();
+};
 // Export functions.
 module.exports.requiresLogin = requiresLogin;
 module.exports.requiresLogout = requiresLogout;
