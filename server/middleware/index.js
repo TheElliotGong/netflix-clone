@@ -54,9 +54,10 @@ const bypassSecure = (req, res, next) => {
 // Export functions.
 module.exports.requiresLogin = requiresLogin;
 module.exports.requiresLogout = requiresLogout;
-// bypass https checks for debug mode.
-if (process.env.NODE_ENV === 'production') {
-  module.exports.requiresSecure = requiresSecure;
-} else {
-  module.exports.requiresSecure = bypassSecure;
-}
+module.exports.requiresSecure = requiresSecure;
+// // bypass https checks for debug mode.
+// if (process.env.NODE_ENV === 'production') {
+//   module.exports.requiresSecure = requiresSecure;
+// } else {
+//   module.exports.requiresSecure = bypassSecure;
+// }

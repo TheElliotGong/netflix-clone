@@ -1,4 +1,4 @@
-//Helper function to hide warning message
+// Helper function to hide warning message
 const hideError = () => { document.querySelector(".warning").classList.add('hidden'); };
 //Helper function to show warning message.
 const handleError = (message) => {
