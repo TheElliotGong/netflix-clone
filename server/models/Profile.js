@@ -30,6 +30,11 @@ const ProfileSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  avatar: {
+    type: String,
+    required: false,
+    default: '/assets/img/netflix-avatar.png',
+  }
 });
 // Hep store profile in redis
 ProfileSchema.statics.toAPI = (doc) => ({

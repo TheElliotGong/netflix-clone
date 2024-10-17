@@ -41,11 +41,34 @@ html, body {
 
 .manageAvatar
 {
+    position:relative;
     background-image: url('/assets/img/netflix-avatar.png');
     background-size: cover;
     background-position: center;
-}
+   
 
+}
+.manageAvatar img
+{
+    position: relative;
+    z-index: 2;
+}
+.manageAvatar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Black color with 70% opacity */
+    z-index: 1; /* Ensure the overlay is on top */
+    pointer-events: none; /* Allow clicks to pass through the overlay */
+}
+.manageAvatar:hover
+{
+    border: 2px solid white;
+    color: white;
+}
 .pencil-icon
 {
     width: 40%;
@@ -58,11 +81,7 @@ h1
     font-size: 4vw;
     
 }
-.manageAvatar:hover
-{
-    border: 2px solid white;
-    color: white;
-}
+
 #profileRow
 {
 
