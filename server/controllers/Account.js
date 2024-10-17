@@ -79,7 +79,7 @@ const signup = async (req, res) => {
     return res.json({ redirect: '/profiles' });
   } catch (err) {
     // If username is already in use, return error.
-    console.log(err);
+    // console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Username already in use.' });
     }
@@ -121,7 +121,7 @@ const changePassword = async (req, res) => {
     await account.save();
     return res.json({ redirect: '/logout' });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occurred' });
   }
 };

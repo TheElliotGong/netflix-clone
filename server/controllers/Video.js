@@ -20,7 +20,7 @@ const getVideos = async (req, res) => {
     const premiumStatus = req.session.account.premium;
     return res.json({ videos: docs, premiumStatus });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
@@ -42,7 +42,7 @@ const getSpecialVideos = async (req, res) => {
       docs = await Video.find({ _id: { $in: profile.watched } }).lean().exec();
     } return res.json({ videos: docs });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
@@ -56,29 +56,29 @@ const addSpecialVideo = async (req, res) => {
   try {
     const { videoID } = req.body;
     const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
-    // See if the video already exists in the favorites list. if it does, then we don't need to make changes.
+    // See if the video already exists in the favorites list.
     if (req.url === '/addToFavorites') {
       if (profile.favorites.includes(videoID)) {
         // console.log("Video already in favorites");
-        return;
-        // return res.status(409).json({ message: 'Video already in Favorites' });
+        // return;
+        return res.status(409).json({ message: 'Video already in Favorites' });
       }
       profile.favorites.push(videoID);
       await profile.save();
     }
-    // See if the video already exists in the watched list. if it does, then we don't need to make changes.
+    // See if the video already exists in the watched list.
     if (req.url === '/addToWatched') {
       if (profile.watched.includes(videoID)) {
         // console.log("Video already in watched");
-        return;
-        // return res.status(409).json({ message: 'Video already in watched' });
+        // return;
+        return res.status(409).json({ message: 'Video already in watched' });
       }
       profile.watched.push(videoID);
       await profile.save();
     }
     return res.status(200).json({ message: 'Successful save' });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
@@ -100,7 +100,7 @@ const removeFromFavorites = async (req, res) => {
     await profile.save();
     return res.status(200).json({ message: 'Video removed from favorites' });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };

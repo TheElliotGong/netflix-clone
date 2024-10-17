@@ -20,7 +20,7 @@ const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1/Netflix-Clone';
 // Set up app.
 mongoose.connect(dbURL).catch((err) => {
   if (err) {
-    console.log('Could not connect to database');
+    // console.log('Could not connect to database');
     throw err;
   }
 });
@@ -60,6 +60,6 @@ redisClient.connect().then(() => {
     if (err) {
       throw err;
     }
-    console.log(`Listening on port ${port}`);
+    // console.log(`Listening on port ${port}`);
   });
 });

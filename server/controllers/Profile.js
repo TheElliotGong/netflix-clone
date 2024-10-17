@@ -23,7 +23,7 @@ const getProfiles = async (req, res) => {
 
     return res.json({ profiles: docs });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
@@ -77,7 +77,7 @@ const createProfile = async (req, res) => {
     return res.status(201).json({ name: newProfile.name, owner: newProfile.owner });
   } catch (err) {
     // Catch and print errors.
-    console.log(err);
+    // console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Profile name is taken.' });
     }
@@ -86,9 +86,9 @@ const createProfile = async (req, res) => {
 };
 /**
  * Remove a profile from the account.
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const removeProfile = async (req, res) => {
   if (!req.body.name) {
@@ -97,24 +97,24 @@ const removeProfile = async (req, res) => {
   try {
     const account = await Account.findOne({ _id: req.session.account._id }).exec();
     const profile = await Profile.findOne({ name: req.body.name }).exec();
-    //Check if profile exists or if correct account is even logged in.
+    // Check if profile exists or if correct account is even logged in.
     if (!profile) {
       return res.status(400).json({ error: 'Profile not found.' });
     }
     if (profile.owner.toString() !== req.session.account._id) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    //Delete the profile and update the account.
+    // Delete the profile and update the account.
     await Profile.deleteOne({ name: req.body.name }).exec();
     account.profileCount -= 1;
     await account.save();
     return res.status(204).end();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
   }
 };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, removeProfile
+  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, removeProfile,
 };
