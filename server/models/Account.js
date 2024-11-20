@@ -37,8 +37,7 @@ const AccountSchema = new mongoose.Schema({
   profileCount:
   {
     type: Number,
-    default: 1,
-    minimum: 1,
+    default: 0,
     required: true,
 
   },

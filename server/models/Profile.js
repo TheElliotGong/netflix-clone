@@ -32,7 +32,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    required: false,
+    required: true,
     default: '/assets/img/netflix-avatar.png',
   },
 });

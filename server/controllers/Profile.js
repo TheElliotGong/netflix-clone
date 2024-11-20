@@ -19,9 +19,10 @@ const getProfiles = async (req, res) => {
   try {
     // Find the profiles associated with the current account.
     const query = { owner: req.session.account._id };
-    const docs = await Profile.find(query).select('name favorites').lean().exec();
-
-    return res.json({ profiles: docs });
+    const docs = await Profile.find(query).select('name favorites watched avatar').lean().exec();
+    const account = await Account.findOne({ _id: req.session.account._id }).exec();
+    console.log(`premium: ${account.premium} `);
+    return res.json({ profiles: docs, premium: account.premium});
   } catch (err) {
     // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
@@ -59,6 +60,7 @@ const createProfile = async (req, res) => {
   }
   const profileData = {
     name: req.body.name,
+    avatar: req.body.avatar,
     owner: req.session.account._id,
   };
   try {
@@ -74,7 +76,7 @@ const createProfile = async (req, res) => {
 
     account.profileCount += 1;
     await account.save();
-    return res.status(201).json({ name: newProfile.name, owner: newProfile.owner });
+    return res.status(201).json({ name: newProfile.name, avatar: newProfile.avatar, owner: newProfile.owner });
   } catch (err) {
     // Catch and print errors.
     // console.log(err);
