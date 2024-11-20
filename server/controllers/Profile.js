@@ -76,7 +76,8 @@ const createProfile = async (req, res) => {
 
     account.profileCount += 1;
     await account.save();
-    return res.status(201).json({ name: newProfile.name, avatar: newProfile.avatar, owner: newProfile.owner });
+    return res.status(201).json({ name: newProfile.name, avatar: newProfile.avatar, 
+      owner: newProfile.owner });
   } catch (err) {
     // Catch and print errors.
     // console.log(err);
