@@ -29,7 +29,7 @@ const redisClient = redis.createClient({
   url: process.env.REDISCLOUD_URL,
 });
 
-redisClient.on('error', (err) => console.log(`Redis error: ${err}`));
+// redisClient.on('error', (err) => console.log(`Redis error: ${err}`));
 // Have the server connect to redis before opening.
 redisClient.connect().then(() => {
   const app = express();

@@ -5,13 +5,8 @@ const { Video } = models;
 const { Profile } = models;
 // Render the main content page.
 const contentPage = async (req, res) => {
-  if(!req.session.profile)
-  {
-    return res.redirect('/login');
-    
-  }
-  const avatar = req.session.profile.avatar;
-  res.render('app', {avatar});
+
+  res.render('app');
 };
 /**
  * This function gets all the video documents stored in the mongodb database.

@@ -128,5 +128,6 @@ const removeProfile = async (req, res) => {
 };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, removeProfile, getAvatar
+  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, 
+  removeProfile, getAvatar
 };
