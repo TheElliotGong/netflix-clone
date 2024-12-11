@@ -5,7 +5,13 @@ const { Video } = models;
 const { Profile } = models;
 // Render the main content page.
 const contentPage = async (req, res) => {
-  res.render('app');
+  if(!req.session.profile)
+  {
+    return res.redirect('/login');
+    
+  }
+  const avatar = req.session.profile.avatar;
+  res.render('app', {avatar});
 };
 /**
  * This function gets all the video documents stored in the mongodb database.
@@ -13,6 +19,8 @@ const contentPage = async (req, res) => {
  * @param {*} res
  * @returns
  */
+
+
 const getVideos = async (req, res) => {
   try {
     // Get all videos from the database.
@@ -24,6 +32,7 @@ const getVideos = async (req, res) => {
     return res.status(500).json({ error: 'An error occured' });
   }
 };
+
 /**
  * This function returns the watched or favorite videos under the currently open profile.
  * @param {*} req

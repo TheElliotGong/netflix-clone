@@ -14,7 +14,7 @@ const router = (app) => {
   app.get('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePasswordPage);
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
-
+  app.get('/getAvatar', mid.requiresLogin, controllers.Profile.getAvatar);
   app.get('/content', mid.requiresLogin, controllers.Video.contentPage);
 
   app.get('/profiles', mid.requiresLogin, controllers.Profile.profilesPage);

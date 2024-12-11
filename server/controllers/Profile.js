@@ -21,7 +21,7 @@ const getProfiles = async (req, res) => {
     const query = { owner: req.session.account._id };
     const docs = await Profile.find(query).select('name favorites watched avatar').lean().exec();
     const account = await Account.findOne({ _id: req.session.account._id }).exec();
-    console.log(`premium: ${account.premium} `);
+    // console.log(`premium: ${account.premium} `);
     return res.json({ profiles: docs, premium: account.premium});
   } catch (err) {
     // console.log(err);
@@ -45,8 +45,17 @@ const loadProfile = async (req, res) => {
       return res.status(401).json({ error: 'Profile unavailable' });
     }
     req.session.profile = Profile.toAPI(profile);
-    return res.json({ redirect: '/content' });
+    return res.json({ redirect: '/content'});
   });
+};
+const getAvatar = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
+    return res.json({ avatar: profile.avatar });
+  } catch (err) {
+    // console.log(err);
+    return res.status(500).json({ error: 'An error occured' });
+  }
 };
 /**
  * This function creates a new profile under the logged in account.
@@ -119,5 +128,5 @@ const removeProfile = async (req, res) => {
 };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, removeProfile,
+  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, removeProfile, getAvatar
 };
