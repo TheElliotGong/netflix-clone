@@ -94,6 +94,16 @@ const getAvatar = async () => {
  */
 const loadVideos = async () => {
     //Fill out the popular and trending sections
+    const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYTgyYjZhZGEzNTE4NmE0MzBiMzVkNTI2Mzk3MDM1MCIsIm5iZiI6MTcyODk0NzI5OC4yNTEwMDAyLCJzdWIiOiI2NzBkYTQ2MmIxNWQ5N2IxYTkzZDQ3MDEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.QPi0OXh48_HI90iIDYOKx3_THACdzWA0h4kyE6DBccs'
+        }
+      };
+   const streamingData = await (await fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US', options)).json();
+   console.log(streamingData.results);
+
     const response = await fetch('/getVideos');
     const data = await response.json();  
     ReactDOM.render(
