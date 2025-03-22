@@ -141,9 +141,9 @@ const Profiles = (props) => {
         >
           Manage Profiles
         </a>
-        {/* <Popup trigger={<button className="button"> Open Modal </button>} modal>
+        <Popup trigger={<button className="button"> Open Modal </button>} modal>
     <span> Modal content </span>
-  </Popup> */}
+  </Popup>
       </div>
     );
   }

@@ -100,4 +100,5 @@ const SignupWindow = () => {
     );
 };
 
+
 window.onload = () => { ReactDOM.render(<LoginWindow />, document.querySelector('#content')); };
