@@ -106,6 +106,7 @@ const loadVideos = async () => {
 
     const response = await fetch('/getVideos');
     const data = await response.json();  
+    console.log(data);
     ReactDOM.render(
         <Videos videos={data.videos} />, document.querySelector("#popular")
     );  
