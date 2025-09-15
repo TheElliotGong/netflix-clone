@@ -27,5 +27,6 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'hosted'),
         filename: '[name]Bundle.js',
+         crossOriginLoading: 'anonymous'
     },
 };

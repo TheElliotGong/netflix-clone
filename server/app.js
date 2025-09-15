@@ -33,18 +33,17 @@ const redisClient = redis.createClient({
 // Have the server connect to redis before opening.
 redisClient.connect().then(() => {
   const app = express();
+  // Update your Helmet configuration
   app.use(helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`],
+      scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:"],
       connectSrc: ["'self'", 'https://api.themoviedb.org'],
-      fontSrc: ["'self'", "https:"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'self'"],
-    },
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"]
+    }
   }));
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
   app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
