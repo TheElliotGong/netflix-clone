@@ -15,10 +15,14 @@ const redis = require('redis');
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1/Netflix-Clone';
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_URL = process.env.DB_URL;
+const DB_NAME = process.env.DB_NAME;
+const MONGO_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Set up app.
-mongoose.connect(dbURL).catch((err) => {
+mongoose.connect(MONGO_URI).catch((err) => {
   if (err) {
     // console.log('Could not connect to database');
     throw err;
