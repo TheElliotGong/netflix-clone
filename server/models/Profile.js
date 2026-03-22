@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
+const EmbeddedVideoSchema = require('./Video.js');
 
 const setName = (name) => _.escape(name).trim();
 let ProfileModel = {};
@@ -12,14 +13,14 @@ const ProfileSchema = new mongoose.Schema({
     set: setName,
   },
   favorites: {
-    type: [mongoose.Schema.ObjectId],
+    type: [EmbeddedVideoSchema],
     required: false,
-    ref: 'Video',
+    default: [],
   },
   watched: {
-    type: [mongoose.Schema.ObjectId],
+    type: [EmbeddedVideoSchema],
     required: false,
-    ref: 'Video',
+    default: [],
   },
   owner: {
     type: mongoose.Schema.ObjectId,

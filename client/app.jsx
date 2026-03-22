@@ -4,38 +4,46 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 /**
  * This helper function assists with managing the favorite videos under the user profile.
- * @param {*} videoID the id of the video being edited.
+ * @param {*} video the video being edited.
  * @param {*} action the action to take on the video.
  * @returns 
  */
-const handleFavorites = (videoID, action) => {
-        //Ensure the videoID is valid.
-        if (!videoID) {
+const handleFavorites = (video, action) => {
+        // Ensure the video payload is valid.
+        if (!video || !video.tmdbId) {
             return false;
         }
-        helper.sendPost(action, { videoID }, reloadFavoritesFromServer);
+        helper.sendPost(action, {
+            videoID: video.tmdbId,
+            mediaType: video.mediaType,
+            video,
+        }, reloadFavoritesFromServer);
         return false;
     }
 /**
  * This helper function assists with managing the watched videos under the user profile.
- * @param {*} videoID 
+ * @param {*} video 
  * @returns 
  */
-const handleWatched = (videoID) => {
-        //Ensure the videoID is valid.
-        if (!videoID) {
+const handleWatched = (video) => {
+        // Ensure the video payload is valid.
+        if (!video || !video.tmdbId) {
             return false;
         }
-        helper.sendPost('/addToWatched', { videoID }, reloadWatchedFromServer);
+        helper.sendPost('/addToWatched', {
+            videoID: video.tmdbId,
+            mediaType: video.mediaType,
+            video,
+        }, reloadWatchedFromServer);
         return false;
     };
 //This is the button that adds a video to the favorites list.
 const AddToFavoritesButton = (props) => {
-    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/addToFavorites');}}>Add to Favorites</button>
+    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.video, '/addToFavorites');}}>Add to Favorites</button>
 };
 //This is the button that removes a video from the favorites list.
 const RemoveFromFavoritesButton = (props) => {
-    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.videoID, '/removeFromFavorites');}}>Remove from Favorites</button>
+    return <button onClick = {(e)=>{e.preventDefault(); handleFavorites(props.video, '/removeFromFavorites');}}>Remove from Favorites</button>
 };
 /**
  * This function reloads the favorite videos from the selected user profile.
@@ -149,13 +157,13 @@ const loadWatchedVideos = async () => {
 const Videos = (props) => {
     const videoNodes = props.videos.map(video => {
         return <div id={video._id} className='video'>
-            <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video._id);}}>
+            <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video);}}>
                 <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
             </button>
             <p className='name' >{video.name}</p>
             <p className='genre' >{video.genre}</p>
             <div className = "buttonContainer">
-                <AddToFavoritesButton videoID = {video._id} />
+                <AddToFavoritesButton video = {video} />
             </div>
             
         </div>
@@ -185,7 +193,7 @@ const WatchedVideos = (props) => {
             <p className='name' >{video.name}</p>
             <p className='genre' >{video.genre}</p>
             <div className = "buttonContainer">
-                <AddToFavoritesButton videoID = {video._id} />
+                <AddToFavoritesButton video = {video} />
             </div>
         </div>});
     return (<div className="videoList">
@@ -209,13 +217,13 @@ const FavoriteVidoes = (props) => {
     }
     const videoNodes = props.favorites.map(video => {
         return <div id={video._id} className='favoriteVideo'>
-            <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video._id);}}>
+                        <button className = "videoPlayer" onClick = {(e)=>{e.preventDefault();handleWatched(video);}}>
                 <img src='/assets/img/video.png' alt = "video" class = "thumbnail" />
             </button>
             <p className='name' >{video.name}</p>
             <p className='name' >{video.genre}</p>
             <div className = "buttonContainer">
-              <RemoveFromFavoritesButton videoID = {video._id} />
+                            <RemoveFromFavoritesButton video = {video} />
             </div>
             
         </div>

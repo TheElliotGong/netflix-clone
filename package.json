@@ -5,6 +5,7 @@
   "main": "./server/app.js",
   "scripts": {
     "webpack": "webpack",
+    "render-build": "npm run webpack",
     "webpackWatch": "webpack watch",
     "nodemon": "nodemon -e js,html,css --watch ./server --watch ./hosted ./server/app.js",
     "start": "node ./server/app.js",
@@ -32,6 +33,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "axios": "^1.13.6",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
@@ -41,7 +43,9 @@
     "express": "^4.18.2",
     "express-handlebars": "^7.0.4",
     "express-session": "^1.17.3",
+    "fuse.js": "^7.1.0",
     "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^7.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

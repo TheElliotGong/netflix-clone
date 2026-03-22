@@ -14,12 +14,32 @@ const redis = require('redis');
 
 const router = require('./router.js');
 
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_URL = process.env.DB_URL;
-const DB_NAME = process.env.DB_NAME;
-const MONGO_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
+const {
+  PORT,
+  NODE_PORT,
+  NODE_ENV = 'development',
+  SESSION_SECRET,
+  REDIS_URL,
+  REDISCLOUD_URL,
+  DB_USER,
+  DB_PASSWORD,
+  DB_URL,
+  DB_NAME,
+  MONGO_URI: mongoUriFromEnv,
+} = process.env;
+
+const port = PORT || NODE_PORT || 3000;
+const sessionSecret = SESSION_SECRET || 'Domo Arigato';
+const redisUrl = REDIS_URL || REDISCLOUD_URL;
+const MONGO_URI = mongoUriFromEnv || (
+  DB_USER && DB_PASSWORD && DB_URL && DB_NAME
+    ? `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
+    : null
+);
+
+if (!MONGO_URI) {
+  throw new Error('Missing MongoDB connection settings. Set MONGO_URI or DB_USER/DB_PASSWORD/DB_URL/DB_NAME.');
+}
 
 // Set up app.
 mongoose.connect(MONGO_URI).catch((err) => {
@@ -28,26 +48,20 @@ mongoose.connect(MONGO_URI).catch((err) => {
     throw err;
   }
 });
-// Include redis content and connection details.
-const redisClient = redis.createClient({
-  url: process.env.REDISCLOUD_URL,
-});
-
-// redisClient.on('error', (err) => console.log(`Redis error: ${err}`));
-// Have the server connect to redis before opening.
-redisClient.connect().then(() => {
+const startServer = (redisStore) => {
   const app = express();
+  app.set('trust proxy', 1);
   // Update your Helmet configuration
   app.use(helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:"],
+      imgSrc: ["'self'", 'data:'],
       connectSrc: ["'self'", 'https://api.themoviedb.org'],
       formAction: ["'self'"],
-      frameAncestors: ["'none'"]
-    }
+      frameAncestors: ["'none'"],
+    },
   }));
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
   app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
@@ -56,15 +70,23 @@ redisClient.connect().then(() => {
   app.use(bodyParser.json());
   // Create a session tracking feature to log users and accounts that access the server/database.
   // These session keys will be stored in redis.
-  app.use(session({
+  const sessionOptions = {
     key: 'sessionid',
-    store: new RedisStore({
-      client: redisClient,
-    }),
-    secret: 'Domo Arigato',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
-  }));
+    cookie: {
+      secure: NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+    },
+  };
+
+  if (redisStore) {
+    sessionOptions.store = redisStore;
+  }
+
+  app.use(session(sessionOptions));
   // enable app to use handlebars.
   app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
   app.set('view engine', 'handlebars');
@@ -77,4 +99,19 @@ redisClient.connect().then(() => {
     }
     // console.log(`Listening on port ${port}`);
   });
-});
+};
+
+if (redisUrl) {
+  // Include redis content and connection details.
+  const redisClient = redis.createClient({
+    url: redisUrl,
+  });
+
+  redisClient.connect().then(() => {
+    startServer(new RedisStore({ client: redisClient }));
+  }).catch((err) => {
+    throw err;
+  });
+} else {
+  startServer(null);
+}
