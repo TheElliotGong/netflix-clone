@@ -22,7 +22,7 @@ const getProfiles = async (req, res) => {
     const docs = await Profile.find(query).select('name favorites watched avatar').lean().exec();
     const account = await Account.findOne({ _id: req.session.account._id }).exec();
     // console.log(`premium: ${account.premium} `);
-    return res.json({ profiles: docs, premium: account.premium});
+    return res.json({ profiles: docs, premium: account.premium });
   } catch (err) {
     // console.log(err);
     return res.status(500).json({ error: 'An error occured' });
@@ -45,7 +45,7 @@ const loadProfile = async (req, res) => {
       return res.status(401).json({ error: 'Profile unavailable' });
     }
     req.session.profile = Profile.toAPI(profile);
-    return res.json({ redirect: '/content'});
+    return res.json({ redirect: '/content' });
   });
 };
 const getAvatar = async (req, res) => {
@@ -85,8 +85,11 @@ const createProfile = async (req, res) => {
 
     account.profileCount += 1;
     await account.save();
-    return res.status(201).json({ name: newProfile.name, avatar: newProfile.avatar, 
-      owner: newProfile.owner });
+    return res.status(201).json({
+      name: newProfile.name,
+      avatar: newProfile.avatar,
+      owner: newProfile.owner,
+    });
   } catch (err) {
     // Catch and print errors.
     // console.log(err);
@@ -128,6 +131,11 @@ const removeProfile = async (req, res) => {
 };
 
 module.exports = {
-  getProfiles, profilesPage, createProfile, manageProfilesPage, loadProfile, 
-  removeProfile, getAvatar
+  getProfiles,
+  profilesPage,
+  createProfile,
+  manageProfilesPage,
+  loadProfile,
+  removeProfile,
+  getAvatar,
 };

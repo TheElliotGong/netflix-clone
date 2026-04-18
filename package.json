@@ -8,6 +8,7 @@
     "webpackWatch": "webpack watch",
     "nodemon": "nodemon -e js,html,css --watch ./server --watch ./hosted ./server/app.js",
     "start": "node ./server/app.js",
+    "lint:client": "eslint ./client --ext .js,.jsx --fix",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
     "heroku-postbuild": "webpack"
@@ -27,6 +28,7 @@
     "eslint": "^8.36.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-react": "^7.37.5",
     "nodemon": "^3.0.2",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"

@@ -1,15 +1,17 @@
-const helper = require("./helper.js");
-const React = require("react");
-const Popup = require("reactjs-popup").default;
+const helper = require('./helper.js');
+const React = require('react');
+const Popup = require('reactjs-popup').default;
+
 const { useState } = React;
-const ReactDOM = require("react-dom");
+const ReactDOM = require('react-dom');
+
 const avatars = [
-  "/assets/img/netflix-avatar.png",
-  "/assets/img/netflix-avatar_green.png",
-  "/assets/img/netflix-avatar_orange.png",
-  "/assets/img/netflix-avatar_purple.png",
-  "/assets/img/netflix-avatar_red.png",
-  "/assets/img/netflix-avatar_yellow.png",
+  '/assets/img/netflix-avatar.png',
+  '/assets/img/netflix-avatar_green.png',
+  '/assets/img/netflix-avatar_orange.png',
+  '/assets/img/netflix-avatar_purple.png',
+  '/assets/img/netflix-avatar_red.png',
+  '/assets/img/netflix-avatar_yellow.png',
 
   // Add more avatars as needed
 ];
@@ -21,23 +23,23 @@ const avatars = [
 const handleProfileCreation = (e) => {
   e.preventDefault();
   helper.hideError();
-  const name = e.target.querySelector("#profileName").value;
+  const name = e.target.querySelector('#profileName').value;
   const avatar = e.target.querySelector('input[name="avatar"]:checked').value;
   console.log(avatar);
-  //Check for errors.
+  // Check for errors.
   if (!name) {
-    helper.handleError("Name is required!");
+    helper.handleError('Name is required!');
     return false;
   }
-  //Otherwise, send the post request.
+  // Otherwise, send the post request.
   helper.sendPost(e.target.action, { name, avatar }, reloadProfilesFromServer);
   return false;
 };
 
-const AvatarSelect = ({ avatars, defaultAvatar }) => {
+function AvatarSelect({ avatars, defaultAvatar }) {
   // Use the useState hook to manage the selected avatar.
   const [selectedAvatar, setSelectedAvatar] = useState(
-    defaultAvatar || avatars[0]
+    defaultAvatar || avatars[0],
   );
 
   return (
@@ -48,7 +50,7 @@ const AvatarSelect = ({ avatars, defaultAvatar }) => {
           <label
             key={index}
             className={`avatar-option ${
-              selectedAvatar === avatar ? "selected" : ""
+              selectedAvatar === avatar ? 'selected' : ''
             }`}
           >
             <input
@@ -64,65 +66,60 @@ const AvatarSelect = ({ avatars, defaultAvatar }) => {
       </div>
     </div>
   );
-};
+}
 
 /**
  * This react component creates the form for creating a new profile.
  * @returns
  */
-const createProfileForm = () => {
-  return (
-    <div>
-      <h2>Create New Profile</h2>
-      <form
-        id="createProfileForm"
-        onSubmit={handleProfileCreation}
-        action="/createProfile"
-        method="POST"
-      >
-        <AvatarSelect avatars={avatars} />
-        <label htmlFor="profileName">
-          <h3>Name: </h3>{" "}
-        </label>
-        <input
-          id="profileName"
-          type="text"
-          name="profileName"
-          placeholder="Name"
-        />
-        <input className="formSubmit" type="submit" value="Create Profile" />
-        <h3 className="warning hidden">
-          <span className="errorMessage"></span>
-        </h3>
-      </form>
-    </div>
-  );
-};
-
-
+const createProfileForm = () => (
+  <div>
+    <h2>Create New Profile</h2>
+    <form
+      id="createProfileForm"
+      onSubmit={handleProfileCreation}
+      action="/createProfile"
+      method="POST"
+    >
+      <AvatarSelect avatars={avatars} />
+      <label htmlFor="profileName">
+        <h3>Name: </h3>
+        {' '}
+      </label>
+      <input
+        id="profileName"
+        type="text"
+        name="profileName"
+        placeholder="Name"
+      />
+      <input className="formSubmit" type="submit" value="Create Profile" />
+      <h3 className="warning hidden">
+        <span className="errorMessage" />
+      </h3>
+    </form>
+  </div>
+);
 
 /**
  * This react component creates the profile buttons for the profiles page.
  * @param {*} props
  * @returns
  */
-const Profiles = (props) => {
-  //Render the UI for each profile.
+function Profiles(props) {
+  // Render the UI for each profile.
   if (props.profiles.length > 0) {
-    const profileNodes = props.profiles.map((profile) => {
-      return (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            helper.handleLoadProfile(profile.name);
-          }}
-          className="profile"
-        >
-          <img src={profile.avatar} alt="avatar" className="avatar" />
-          <h2 className="name">{profile.name}</h2>
-        </button>
-      );
-    });
+    const profileNodes = props.profiles.map((profile) => (
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          helper.handleLoadProfile(profile.name);
+        }}
+        className="profile"
+      >
+        <img src={profile.avatar} alt="avatar" className="avatar" />
+        <h2 className="name">{profile.name}</h2>
+      </button>
+    ));
     return (
       <div className="profiles">
         <h1>Who's Watching?</h1>
@@ -135,39 +132,39 @@ const Profiles = (props) => {
 
             ReactDOM.render(
               <ManageProfiles profiles={props.profiles} />,
-              document.querySelector("#profileContent")
+              document.querySelector('#profileContent'),
             );
           }}
         >
           Manage Profiles
         </a>
         <Popup trigger={<button className="button"> Open Modal </button>} modal>
-    <span> Modal content </span>
-  </Popup>
+          <span> Modal content </span>
+        </Popup>
       </div>
     );
   }
-  //Return a simple message if the account has no profiles.
-  else {
-    return (
-      <div className="profiles">
-        <h1>No Profiles Yet</h1>
-        <a
-          id="manageProfilesButton"
-          href="/manageProfiles"
-          onClick={(e) => {
-            e.preventDefault();
+  // Return a simple message if the account has no profiles.
 
-            ReactDOM.render(
-              <ManageProfiles profiles={props.profiles} />,
-              document.querySelector("#profileContent")
-            );
-          }}
-        >
-          Manage Profiles
-        </a>
-        <Popup trigger={<button className="button">Manage Profiles</button>} modal nested>
-        {close => (
+  return (
+    <div className="profiles">
+      <h1>No Profiles Yet</h1>
+      <a
+        id="manageProfilesButton"
+        href="/manageProfiles"
+        onClick={(e) => {
+          e.preventDefault();
+
+          ReactDOM.render(
+            <ManageProfiles profiles={props.profiles} />,
+            document.querySelector('#profileContent'),
+          );
+        }}
+      >
+        Manage Profiles
+      </a>
+      <Popup trigger={<button className="button">Manage Profiles</button>} modal nested>
+        {(close) => (
           <div className="modal">
             <button className="close" onClick={close}>
               &times;
@@ -180,49 +177,46 @@ const Profiles = (props) => {
           </div>
         )}
       </Popup>
-      </div>
-    );
-  }
-};
+    </div>
+  );
+}
 /**
  * This react component creates the buttons for managing existing profiles.
  * @param {*} props
  * @returns
  */
-const ManageProfiles = (props) => {
-  //Display the Editing UI for each profile.
+function ManageProfiles(props) {
+  // Display the Editing UI for each profile.
   if (props.profiles.length > 0) {
-    const profileNodes = props.profiles.map((profile) => {
-      return (
-        <button
-          className="manageProfile"
-          onClick={(e) => {
-            e.preventDefault();
-            initEditProfileForm(profile);
-          }}
+    const profileNodes = props.profiles.map((profile) => (
+      <button
+        className="manageProfile"
+        onClick={(e) => {
+          e.preventDefault();
+          initEditProfileForm(profile);
+        }}
+      >
+        <div
+          className="manageAvatar"
+          style={{ backgroundImage: `url(${profile.avatar})` }}
         >
-          <div
-            className="manageAvatar"
-            style={{ backgroundImage: `url(${profile.avatar})` }}
-          >
-            <img src="/assets/img/pencil.png" className="pencil-icon" />
-          </div>
-          <h2 className="name">{profile.name}</h2>
-        </button>
-      );
-    });
+          <img src="/assets/img/pencil.png" className="pencil-icon" />
+        </div>
+        <h2 className="name">{profile.name}</h2>
+      </button>
+    ));
 
     return (
       <div className="profiles">
         <h1>Manage Profiles:</h1>
         <div id="profileRow">{profileNodes}</div>
 
-        {(props.premium && props.profiles.length < 10) ||
-        (!props.premium && props.profiles.length < 5) ? (
-          createProfileForm()
-        ) : (
-          <h3>Maximum Profile Count Reached</h3>
-        )}
+        {(props.premium && props.profiles.length < 10)
+        || (!props.premium && props.profiles.length < 5) ? (
+            createProfileForm()
+          ) : (
+            <h3>Maximum Profile Count Reached</h3>
+          )}
         <a
           id="doneButton"
           href="/profiles"
@@ -231,7 +225,7 @@ const ManageProfiles = (props) => {
 
             ReactDOM.render(
               <Profiles profiles={props.profiles} />,
-              document.querySelector("#profileContent")
+              document.querySelector('#profileContent'),
             );
           }}
         >
@@ -240,95 +234,94 @@ const ManageProfiles = (props) => {
       </div>
     );
   }
-  //Return a simple message if the account has no profiles to manage.
-  else {
-    return (
-      <div className="profiles">
-        <h1>No Profiles Yet</h1>
+  // Return a simple message if the account has no profiles to manage.
 
-        {createProfileForm()}
+  return (
+    <div className="profiles">
+      <h1>No Profiles Yet</h1>
 
-        <a
-          id="doneButton"
-          href="/profiles"
-          onClick={(e) => {
-            e.preventDefault();
+      {createProfileForm()}
 
-            ReactDOM.render(
-              <Profiles profiles={props.profiles} />,
-              document.querySelector("#profileContent")
-            );
-          }}
-        >
-          Done
-        </a>
-      </div>
-    );
-  }
-};
+      <a
+        id="doneButton"
+        href="/profiles"
+        onClick={(e) => {
+          e.preventDefault();
+
+          ReactDOM.render(
+            <Profiles profiles={props.profiles} />,
+            document.querySelector('#profileContent'),
+          );
+        }}
+      >
+        Done
+      </a>
+    </div>
+  );
+}
 
 const reloadProfilesFromServer = async () => {
-  const response = await fetch("/getProfiles");
+  const response = await fetch('/getProfiles');
   const data = await response.json();
-  //Render the domos under the selected html element.
+  // Render the domos under the selected html element.
   ReactDOM.render(
     <ManageProfiles profiles={data.profiles} />,
-    document.querySelector("#profileContent")
+    document.querySelector('#profileContent'),
   );
 };
 
 const closeEditProfileForm = () => {
-  document.querySelector(".modal-content").style.display = "none";
+  document.querySelector('.modal-content').style.display = 'none';
 };
 const initEditProfileForm = (profile) => {
-  document.querySelector(".modal-content").style.display = "block";
-  document.getElementById("profileName").value = profile.name;
-  document.getElementById("profileAvatar").value = profile.avatar;
-  document.querySelector("#profileAvatar").innerHTML = `${(
+  document.querySelector('.modal-content').style.display = 'block';
+  document.getElementById('profileName').value = profile.name;
+  document.getElementById('profileAvatar').value = profile.avatar;
+  document.querySelector('#profileAvatar').innerHTML = `${(
     <AvatarSelect avatars={avatars} defaultAvatar={profile.avatar} />
   )}`;
-  document.getElementById("editProfileForm").onsubmit = (e) => {
+  document.getElementById('editProfileForm').onsubmit = (e) => {
     e.preventDefault();
     helper.hideError();
-    const name = e.target.querySelector("#profileName").value;
+    const name = e.target.querySelector('#profileName').value;
     const avatar = e.target.querySelector('input[name="avatar"]:checked').value;
 
-    //Check for errors.
+    // Check for errors.
     if (!name) {
-      helper.handleError("Name is required!");
+      helper.handleError('Name is required!');
       return false;
     }
-    //Otherwise, send the post request.
+    // Otherwise, send the post request.
     helper.sendPost(
       e.target.action,
       { name, avatar },
-      reloadProfilesFromServer
+      reloadProfilesFromServer,
     );
     return false;
   };
-  //Set up the delete profile button.
-  document.querySelector("#deleteProfile").onClick = (e) => {
+  // Set up the delete profile button.
+  document.querySelector('#deleteProfile').onClick = (e) => {
     e.preventDefault();
     helper.sendPost(
-      "/removeProfile",
+      '/removeProfile',
       { name: profile.name },
-      reloadProfilesFromServer
+      reloadProfilesFromServer,
     );
     closeEditProfileForm();
   };
-  document.querySelector("#closeForm").onClick = (e) => {
+  document.querySelector('#closeForm').onClick = (e) => {
     e.preventDefault();
     closeEditProfileForm();
   };
 };
 
 const init = async () => {
-  const response = await fetch("/getProfiles");
+  const response = await fetch('/getProfiles');
   const data = await response.json();
-  //Render the domos under the selected html element.
+  // Render the domos under the selected html element.
   ReactDOM.render(
     <Profiles profiles={data.profiles} preimumStatus={data.premium} />,
-    document.querySelector("#profileContent")
+    document.querySelector('#profileContent'),
   );
 };
 

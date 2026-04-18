@@ -1,5 +1,14 @@
-{ 
-  "extends": "airbnb/base",
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "no-underscore-dangle" : "off",
     "no-plusplus": "off",
