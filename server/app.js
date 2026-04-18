@@ -14,11 +14,16 @@ const redis = require('redis');
 
 const router = require('./router.js');
 
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_URL = process.env.DB_URL;
-const DB_NAME = process.env.DB_NAME;
+const {
+  PORT,
+  NODE_PORT,
+  DB_USER,
+  DB_PASSWORD,
+  DB_URL,
+  DB_NAME,
+  REDISCLOUD_URL,
+} = process.env;
+const port = PORT || NODE_PORT || 3000;
 const MONGO_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Set up app.
@@ -30,7 +35,7 @@ mongoose.connect(MONGO_URI).catch((err) => {
 });
 // Include redis content and connection details.
 const redisClient = redis.createClient({
-  url: process.env.REDISCLOUD_URL,
+  url: REDISCLOUD_URL,
 });
 
 // redisClient.on('error', (err) => console.log(`Redis error: ${err}`));
@@ -43,11 +48,11 @@ redisClient.connect().then(() => {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:"],
+      imgSrc: ["'self'", "'data:'"],
       connectSrc: ["'self'", 'https://api.themoviedb.org'],
       formAction: ["'self'"],
-      frameAncestors: ["'none'"]
-    }
+      frameAncestors: ["'none'"],
+    },
   }));
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
   app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
@@ -75,6 +80,8 @@ redisClient.connect().then(() => {
     if (err) {
       throw err;
     }
-    // console.log(`Listening on port ${port}`);
+    const appUrl = `http://localhost:${port}/`;
+    process.stdout.write(`Listening on port ${port}\n`);
+    process.stdout.write(`App URL: ${appUrl}\n`);
   });
 });
