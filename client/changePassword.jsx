@@ -1,7 +1,23 @@
 // import helper files.
 const React = require('react');
-const ReactDOM = require('react-dom');
+const ReactDOMClient = require('react-dom/client');
 const helper = require('./helper.js');
+
+const roots = {};
+
+const renderAtSelector = (selector, component) => {
+  const container = document.querySelector(selector);
+
+  if (!container) {
+    return;
+  }
+
+  if (!roots[selector]) {
+    roots[selector] = ReactDOMClient.createRoot(container);
+  }
+
+  roots[selector].render(component);
+};
 /**
  * This function handles changing the password for logged in user.
  * @param {*} e
@@ -31,7 +47,7 @@ const handlePasswordChange = (e) => {
  * @param {*} props
  * @returns
  */
-function ChangePasswordWindow(props) {
+function ChangePasswordWindow() {
   return (
     // Create the form.
     <div className="formWindow">
@@ -83,7 +99,7 @@ function ChangePasswordWindow(props) {
  * Add react component to page.
  */
 const init = () => {
-  ReactDOM.render(<ChangePasswordWindow />, document.querySelector('#content'));
+  renderAtSelector('#content', <ChangePasswordWindow />);
 };
 
 window.onload = init;

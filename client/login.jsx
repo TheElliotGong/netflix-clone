@@ -72,9 +72,9 @@ function LoginWindow() {
           id="signupButton"
           href="/signup"
           onClick={(e) => {
-  e.preventDefault();
-  ReactDOM.render(<SignupWindow />, document.querySelector('#content'));
-}}
+            e.preventDefault();
+            ReactDOM.render(<SignupWindow />, document.querySelector('#content'));
+          }}
         >
           <strong>Sign up now</strong>
           .
@@ -93,14 +93,22 @@ function SignupWindow() {
     <div className="formWindow">
       <form id="signupForm" onSubmit={handleSignup} action="/signup" method="POST" className="mainForm">
         <h1>Sign Up</h1>
-        <label htmlFor="username">Username: </label>
-        <input id="user" type="text" name="username" placeholder="Username" />
-        <label htmlFor="pass">Password: </label>
-        <input id="pass" type="password" name="pass" placeholder="Password" />
-        <label htmlFor="pass2">Re-enter Password: </label>
-        <input id="pass2" type="password" name="pass2" placeholder="Re-enter Password" />
-        <label htmlFor="premium">Premium: </label>
-        <input id="premium" type="checkbox" />
+        <label htmlFor="user">
+          Username:
+          <input id="user" type="text" name="username" placeholder="Username" />
+        </label>
+        <label htmlFor="pass">
+          Password:
+          <input id="pass" type="password" name="pass" placeholder="Password" />
+        </label>
+        <label htmlFor="pass2">
+          Re-enter Password:
+          <input id="pass2" type="password" name="pass2" placeholder="Re-enter Password" />
+        </label>
+        <label htmlFor="premium">
+          Premium:
+          <input id="premium" type="checkbox" />
+        </label>
         <input className="formSubmit" type="submit" value="Sign Up" />
         <h3 className="warning hidden"><span className="errorMessage" /></h3>
       </form>
