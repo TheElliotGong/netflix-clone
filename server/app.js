@@ -46,9 +46,9 @@ redisClient.connect().then(() => {
   app.use(helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "'data:'"],
+      scriptSrc: ["'self'", "'/assets/'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "'/assets/'"],
+      imgSrc: ["'self'", "'data:'", "'/assets/'"],
       connectSrc: ["'self'", 'https://api.themoviedb.org'],
       formAction: ["'self'"],
       frameAncestors: ["'none'"],
