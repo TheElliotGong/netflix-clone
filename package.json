@@ -4,11 +4,10 @@
   "description": "A Simple Login Example using Node.js, Mongo and Redis",
   "main": "./server/app.js",
   "scripts": {
-    "prestart": "webpack",
     "webpack": "webpack",
     "webpackWatch": "webpack watch",
     "nodemon": "nodemon -e js,html,css --watch ./server --watch ./hosted ./server/app.js",
-    "start": "node ./server/app.js",
+    "start": "npm run webpack && node ./server/app.js",
     "lint:client": "eslint ./client --ext .js,.jsx --fix",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
