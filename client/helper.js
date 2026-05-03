@@ -40,13 +40,13 @@ const sendPost = async (url, data, handler) => {
   }
 };
 /**
- * This function handles the load profile process for the Domomaker app.
+ * This function handles the load profile process for the Netflix Clone app.
  * @param {*} name the name of the profile to load.
  * @returns
  */
 const handleLoadProfile = (name) => {
   if (!name) {
-    helper.handleError('Name is required!');
+    handleError('Name is required!');
     return false;
   }
   sendPost('/loadProfile', { name });

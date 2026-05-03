@@ -1,6 +1,8 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
+const { createRoot } = require('react-dom/client');
 const helper = require('./helper.js');
+
+const root = createRoot(document.querySelector('#content'));
 /**
  * This function handles logging in for the domo
  * @param {*} e
@@ -73,7 +75,7 @@ function LoginWindow() {
           href="/signup"
           onClick={(e) => {
             e.preventDefault();
-            ReactDOM.render(<SignupWindow />, document.querySelector('#content'));
+            root.render(<SignupWindow />);
           }}
         >
           <strong>Sign up now</strong>
@@ -115,10 +117,10 @@ function SignupWindow() {
       <div id="login">
         Already have an account?
         {' '}
-        <a id="loginButton" href="/login" onClick={(e) => { e.preventDefault(); ReactDOM.render(<LoginWindow />, document.querySelector('#content')); }}><strong>Log In</strong></a>
+        <a id="loginButton" href="/login" onClick={(e) => { e.preventDefault(); root.render(<LoginWindow />); }}><strong>Log In</strong></a>
       </div>
     </div>
   );
 }
 
-window.onload = () => { ReactDOM.render(<LoginWindow />, document.querySelector('#content')); };
+window.onload = () => { root.render(<LoginWindow />); };
