@@ -1,12 +1,23 @@
 const React = require('react');
-const Popup = require('reactjs-popup').default;
-
-const { useState } = React;
 const ReactDOMClient = require('react-dom/client');
 const PropTypes = require('prop-types'); // eslint-disable-line import/no-extraneous-dependencies
 const helper = require('./helper.js');
 
+const { useState } = React;
+
 const roots = {};
+let currentPremiumStatus = false;
+
+const avatars = [
+  '/assets/img/netflix-avatar.png',
+  '/assets/img/netflix-avatar_green.png',
+  '/assets/img/netflix-avatar_orange.png',
+  '/assets/img/netflix-avatar_purple.png',
+  '/assets/img/netflix-avatar_red.png',
+  '/assets/img/netflix-avatar_yellow.png',
+];
+
+const MAX_PROFILES = 5;
 
 const renderAtSelector = (selector, component) => {
   const container = document.querySelector(selector);
@@ -22,40 +33,63 @@ const renderAtSelector = (selector, component) => {
   roots[selector].render(component);
 };
 
-const avatars = [
-  '/assets/img/netflix-avatar.png',
-  '/assets/img/netflix-avatar_green.png',
-  '/assets/img/netflix-avatar_orange.png',
-  '/assets/img/netflix-avatar_purple.png',
-  '/assets/img/netflix-avatar_red.png',
-  '/assets/img/netflix-avatar_yellow.png',
+const updatePremiumStatus = (premiumStatus) => {
+  currentPremiumStatus = Boolean(premiumStatus);
+  return currentPremiumStatus;
+};
 
-  // Add more avatars as needed
-];
-/**
- * This form only runs when creating a new profile.
- * It should update the manage profiles page on completion.
- * @param {*} e
- * @returns
- */
+const canCreateProfile = (profiles = []) => profiles.length < MAX_PROFILES;
+
+const showEditProfileForm = () => {
+  const editProfileForm = document.getElementById('editProfileForm');
+
+  if (editProfileForm) {
+    editProfileForm.style.display = 'block';
+  }
+};
+
+const hideEditProfileForm = () => {
+  const editProfileForm = document.getElementById('editProfileForm');
+
+  if (editProfileForm) {
+    editProfileForm.style.display = 'none';
+  }
+};
+
+const closeEditProfileForm = () => {
+  hideEditProfileForm();
+};
+
+async function reloadProfilesFromServer() {
+  const response = await fetch('/getProfiles');
+  const data = await response.json();
+
+  updatePremiumStatus(data.premium);
+
+  renderAtSelector(
+    '#profileContent',
+    <ManageProfiles profiles={data.profiles} premium={data.premium} />,
+  );
+}
+
 const handleProfileCreation = (e) => {
   e.preventDefault();
   helper.hideError();
-  const name = e.target.querySelector('#profileName').value;
-  const avatar = e.target.querySelector('input[name="avatar"]:checked').value;
-  // Check for errors.
+
+  const name = e.target.querySelector('#profileName').value.trim();
+  const selectedAvatar = e.target.querySelector('input[name="avatar"]:checked');
+  const avatar = selectedAvatar ? selectedAvatar.value : avatars[0];
+
   if (!name) {
     helper.handleError('Name is required!');
     return false;
   }
-  // Otherwise, send the post request.
-  // eslint-disable-next-line no-use-before-define
+
   helper.sendPost(e.target.action, { name, avatar }, reloadProfilesFromServer);
   return false;
 };
 
 function AvatarSelect({ avatarsList, defaultAvatar }) {
-  // Use the useState hook to manage the selected avatar.
   const [selectedAvatar, setSelectedAvatar] = useState(
     defaultAvatar || avatarsList[0],
   );
@@ -64,118 +98,173 @@ function AvatarSelect({ avatarsList, defaultAvatar }) {
     <div className="avatar-select">
       <h3>Select Your Avatar</h3>
       <div className="avatar-grid">
-        {avatarsList.map((avatar) => (
-          <label
-            key={avatar}
-            htmlFor={`avatar-${avatar.split('/').pop().replace(/\./g, '-')}`}
-            className={`avatar-option ${
-              selectedAvatar === avatar ? 'selected' : ''
-            }`}
-          >
-            <input
-              id={`avatar-${avatar.split('/').pop().replace(/\./g, '-')}`}
-              type="radio"
-              name="avatar"
-              value={avatar}
-              checked={selectedAvatar === avatar}
-              onChange={(e) => setSelectedAvatar(e.target.value)}
-            />
-            <img src={avatar} alt="Profile avatar option" />
-          </label>
-        ))}
+        {avatarsList.map((avatar) => {
+          const avatarId = `avatar-${avatar.split('/').pop().replace(/\./g, '-')}`;
+
+          return (
+            <label
+              key={avatar}
+              htmlFor={avatarId}
+              className={`avatar-option ${selectedAvatar === avatar ? 'selected' : ''}`}
+            >
+              <input
+                id={avatarId}
+                type="radio"
+                name="avatar"
+                value={avatar}
+                checked={selectedAvatar === avatar}
+                onChange={(event) => setSelectedAvatar(event.target.value)}
+              />
+              <img src={avatar} alt="Profile avatar option" />
+            </label>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-/**
- * This react component creates the form for creating a new profile.
- * @returns
- */
-const createProfileForm = () => (
-  <div>
-    <h2>Create New Profile</h2>
+function CreateProfileForm() {
+  return (
     <form
       id="createProfileForm"
+      name="createProfileForm"
       onSubmit={handleProfileCreation}
       action="/createProfile"
       method="POST"
+      className="mainForm"
     >
-      <AvatarSelect avatarsList={avatars} />
+      <h2>Create New Profile</h2>
       <label htmlFor="profileName">
-        <h3>Name: </h3>
-        {' '}
+        Profile Name:
+        <input id="profileName" type="text" name="profileName" placeholder="Profile name" />
       </label>
-      <input
-        id="profileName"
-        type="text"
-        name="profileName"
-        placeholder="Name"
-      />
+      <AvatarSelect avatarsList={avatars} />
       <input className="formSubmit" type="submit" value="Create Profile" />
-      <h3 className="warning hidden">
-        <span className="errorMessage" />
-      </h3>
+      <h3 className="warning hidden"><span className="errorMessage" /></h3>
     </form>
-  </div>
-);
+  );
+}
 
-/**
- * This react component creates the profile buttons for the profiles page.
- * @param {*} props
- * @returns
- */
-function Profiles({ profiles, premiumStatus }) {
-  // Render the UI for each profile.
-  if (profiles.length > 0) {
-    const profileNodes = profiles.map((profile) => (
-      <button
-        type="button"
-        key={profile._id || profile.name}
-        onClick={(e) => {
-          e.preventDefault();
-          helper.handleLoadProfile(profile.name);
-        }}
-        className="profile"
-      >
-        <img src={profile.avatar} alt="avatar" className="avatar" />
-        <h2 className="name">{profile.name}</h2>
-      </button>
-    ));
-    return (
-      <div className="profiles">
-        <h1>Who&apos;s Watching?</h1>
-        <div id="profileRow">{profileNodes}</div>
-        <a
-          id="manageProfilesButton"
-          href="/manageProfiles"
-          onClick={(e) => {
-            e.preventDefault();
+function initEditProfileForm(profile) {
+  showEditProfileForm();
 
-            renderAtSelector(
-              '#profileContent',
-              <ManageProfiles profiles={profiles} premium={premiumStatus} />,
-            );
-          }}
-        >
-          Manage Profiles
-        </a>
-        <Popup trigger={<button type="button" className="button"> Open Modal </button>} modal>
-          <span> Modal content </span>
-        </Popup>
-      </div>
-    );
+  const profileNameInput = document.getElementById('profileName');
+  const profileForm = document.getElementById('profileForm');
+
+  if (profileNameInput) {
+    profileNameInput.value = profile.name;
   }
-  // Return a simple message if the account has no profiles.
+
+  if (profileForm) {
+    profileForm.dataset.originalName = profile.name;
+  }
+
+  renderAtSelector(
+    '#profileAvatar',
+    <AvatarSelect avatarsList={avatars} defaultAvatar={profile.avatar} />,
+  );
+
+  if (profileForm) {
+    profileForm.onsubmit = (e) => {
+      e.preventDefault();
+      helper.hideError();
+
+      const newName = e.target.querySelector('#profileName').value.trim();
+      const selectedAvatar = e.target.querySelector('input[name="avatar"]:checked');
+      const avatar = selectedAvatar ? selectedAvatar.value : profile.avatar;
+
+      if (!newName) {
+        helper.handleError('Name is required!');
+        return false;
+      }
+
+      helper.sendPost(
+        e.target.action,
+        {
+          name: profileForm.dataset.originalName,
+          newName,
+          avatar,
+        },
+        reloadProfilesFromServer,
+      );
+
+      return false;
+    };
+  }
+
+  const deleteProfileButton = document.querySelector('#deleteProfile');
+  const closeFormButton = document.querySelector('#closeForm');
+  const saveProfileButton = document.querySelector('#saveProfile');
+
+  if (deleteProfileButton) {
+    deleteProfileButton.onclick = (e) => {
+      e.preventDefault();
+      helper.sendPost(
+        '/removeProfile',
+        { name: profile.name },
+        reloadProfilesFromServer,
+      );
+      closeEditProfileForm();
+    };
+  }
+
+  if (closeFormButton) {
+    closeFormButton.onclick = (e) => {
+      e.preventDefault();
+      closeEditProfileForm();
+    };
+  }
+
+  if (saveProfileButton) {
+    saveProfileButton.onclick = (e) => {
+      e.preventDefault();
+      // Handle save profile logic here
+      helper.sendPost(
+        '/editProfile',
+        {
+          name: profile.name,
+          newName: profileNameInput.value.trim(),
+          avatar: document.querySelector('input[name="avatar"]:checked').value,
+        },
+        reloadProfilesFromServer,
+      );
+      closeEditProfileForm();
+    };
+  }
+}
+
+function Profiles({ profiles, premiumStatus }) {
+  const hasProfiles = profiles.length > 0;
+  const limitReached = !canCreateProfile(profiles);
+
+  const profileNodes = profiles.map((profile) => (
+    <button
+      type="button"
+      key={profile._id || profile.name}
+      onClick={(e) => {
+        e.preventDefault();
+        helper.handleLoadProfile(profile.name);
+      }}
+      className="profile"
+    >
+      <img src={profile.avatar} alt="avatar" className="avatar" />
+      <h2 className="name">{profile.name}</h2>
+    </button>
+  ));
 
   return (
     <div className="profiles">
-      <h1>No Profiles Yet</h1>
+      <h1>{hasProfiles ? "Who's Watching?" : 'No Profiles Yet'}</h1>
+      {hasProfiles && <div id="profileRow">{profileNodes}</div>}
+      {!limitReached ? <CreateProfileForm /> : <h3>Maximum Profile Count Reached</h3>}
       <a
         id="manageProfilesButton"
         href="/manageProfiles"
         onClick={(e) => {
           e.preventDefault();
+
+          hideEditProfileForm();
 
           renderAtSelector(
             '#profileContent',
@@ -185,93 +274,42 @@ function Profiles({ profiles, premiumStatus }) {
       >
         Manage Profiles
       </a>
-      <Popup trigger={<button type="button" className="button">Manage Profiles</button>} modal nested>
-        {(close) => (
-          <div className="modal">
-            <button type="button" className="close" onClick={close}>
-              &times;
-            </button>
-            <div className="header">Manage Profiles</div>
-            <div className="content">
-              {/* Add your content here */}
-              <p>This is a simple popup with a close button and a title.</p>
-            </div>
-          </div>
-        )}
-      </Popup>
     </div>
   );
 }
-/**
- * This react component creates the buttons for managing existing profiles.
- * @param {*} props
- * @returns
- */
+
 function ManageProfiles({ profiles, premium }) {
-  // Display the Editing UI for each profile.
-  if (profiles.length > 0) {
-    const profileNodes = profiles.map((profile) => (
-      <button
-        type="button"
-        key={profile._id || profile.name}
-        className="manageProfile"
-        onClick={(e) => {
-          e.preventDefault();
-          // eslint-disable-next-line no-use-before-define
-          initEditProfileForm(profile);
-        }}
+  const profileNodes = profiles.map((profile) => (
+    <button
+      type="button"
+      key={profile._id || profile.name}
+      className="manageProfile"
+      onClick={(e) => {
+        e.preventDefault();
+        initEditProfileForm(profile);
+      }}
+    >
+      <div
+        className="manageAvatar"
+        style={{ backgroundImage: `url(${profile.avatar})` }}
       >
-        <div
-          className="manageAvatar"
-          style={{ backgroundImage: `url(${profile.avatar})` }}
-        >
-          <img src="/assets/img/pencil.png" className="pencil-icon" alt="Edit profile" />
-        </div>
-        <h2 className="name">{profile.name}</h2>
-      </button>
-    ));
-
-    return (
-      <div className="profiles">
-        <h1>Manage Profiles:</h1>
-        <div id="profileRow">{profileNodes}</div>
-
-        {(premium && profiles.length < 10)
-        || (!premium && profiles.length < 5) ? (
-            createProfileForm()
-          ) : (
-            <h3>Maximum Profile Count Reached</h3>
-          )}
-        <a
-          id="doneButton"
-          href="/profiles"
-          onClick={(e) => {
-            e.preventDefault();
-
-            renderAtSelector(
-              '#profileContent',
-              <Profiles profiles={profiles} premiumStatus={premium} />,
-            );
-          }}
-        >
-          Done
-        </a>
+        <img src="/assets/img/pencil.png" className="pencil-icon" alt="Edit profile" />
       </div>
-    );
-  }
-  // Return a simple message if the account has no profiles to manage.
+      <h2 className="name">{profile.name}</h2>
+    </button>
+  ));
 
   return (
     <div className="profiles">
-      <h1>No Profiles Yet</h1>
-
-      {createProfileForm()}
-
+      <h1>Manage Profiles:</h1>
+      {profiles.length > 0 ? <div id="profileRow">{profileNodes}</div> : <p>No profiles available to manage.</p>}
       <a
         id="doneButton"
         href="/profiles"
         onClick={(e) => {
           e.preventDefault();
+
+          hideEditProfileForm();
 
           renderAtSelector(
             '#profileContent',
@@ -285,66 +323,13 @@ function ManageProfiles({ profiles, premium }) {
   );
 }
 
-const reloadProfilesFromServer = async () => {
-  const response = await fetch('/getProfiles');
-  const data = await response.json();
-  // Render the domos under the selected html element.
-  renderAtSelector(
-    '#profileContent',
-    <ManageProfiles profiles={data.profiles} premium={data.premium} />,
-  );
-};
-
-function closeEditProfileForm() {
-  document.querySelector('.modal-content').style.display = 'none';
-}
-
-function initEditProfileForm(profile) {
-  document.querySelector('.modal-content').style.display = 'block';
-  document.getElementById('profileName').value = profile.name;
-  document.getElementById('profileAvatar').value = profile.avatar;
-  document.querySelector('#profileAvatar').innerHTML = `${(
-    <AvatarSelect avatarsList={avatars} defaultAvatar={profile.avatar} />
-  )}`;
-  document.getElementById('editProfileForm').onsubmit = (e) => {
-    e.preventDefault();
-    helper.hideError();
-    const name = e.target.querySelector('#profileName').value;
-    const avatar = e.target.querySelector('input[name="avatar"]:checked').value;
-
-    // Check for errors.
-    if (!name) {
-      helper.handleError('Name is required!');
-      return false;
-    }
-    // Otherwise, send the post request.
-    helper.sendPost(
-      e.target.action,
-      { name, avatar },
-      reloadProfilesFromServer,
-    );
-    return false;
-  };
-  // Set up the delete profile button.
-  document.querySelector('#deleteProfile').onClick = (e) => {
-    e.preventDefault();
-    helper.sendPost(
-      '/removeProfile',
-      { name: profile.name },
-      reloadProfilesFromServer,
-    );
-    closeEditProfileForm();
-  };
-  document.querySelector('#closeForm').onClick = (e) => {
-    e.preventDefault();
-    closeEditProfileForm();
-  };
-}
-
 const init = async () => {
   const response = await fetch('/getProfiles');
   const data = await response.json();
-  // Render the domos under the selected html element.
+
+  updatePremiumStatus(data.premium);
+  hideEditProfileForm();
+
   renderAtSelector(
     '#profileContent',
     <Profiles profiles={data.profiles} premiumStatus={data.premium} />,

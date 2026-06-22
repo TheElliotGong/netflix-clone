@@ -1,13 +1,14 @@
 // Import necessary content
-const models = require('../models');
+const models = require("../models");
 
 const { Profile } = models;
 const { Account } = models;
+const MAX_PROFILES = 5;
 // Render the profiles page.
-const profilesPage = (req, res) => res.render('profiles');
+const profilesPage = (req, res) => res.render("profiles");
 // Render the manage profiles page, which is also on the profiles page.
 const manageProfilesPage = (req, res) => {
-  res.render('profiles');
+  res.render("profiles");
 };
 /**
  * This function returns the profiles associated with the current account.
@@ -19,13 +20,18 @@ const getProfiles = async (req, res) => {
   try {
     // Find the profiles associated with the current account.
     const query = { owner: req.session.account._id };
-    const docs = await Profile.find(query).select('name favorites watched avatar').lean().exec();
-    const account = await Account.findOne({ _id: req.session.account._id }).exec();
+    const docs = await Profile.find(query)
+      .select("name favorites watched avatar")
+      .lean()
+      .exec();
+    const account = await Account.findOne({
+      _id: req.session.account._id,
+    }).exec();
     // console.log(`premium: ${account.premium} `);
     return res.json({ profiles: docs, premium: account.premium });
   } catch (err) {
     // console.log(err);
-    return res.status(500).json({ error: 'An error occured' });
+    return res.status(500).json({ error: "An error occured" });
   }
 };
 /**
@@ -37,24 +43,26 @@ const getProfiles = async (req, res) => {
 const loadProfile = async (req, res) => {
   const { name } = req.body;
   if (!name) {
-    return res.status(400).json({ error: 'Profile name required' });
+    return res.status(400).json({ error: "Profile name required" });
   }
   // Authenticate the profile and load the content page.
   return Profile.authenticate(name, (err, profile) => {
     if (err || !profile) {
-      return res.status(401).json({ error: 'Profile unavailable' });
+      return res.status(401).json({ error: "Profile unavailable" });
     }
     req.session.profile = Profile.toAPI(profile);
-    return res.json({ redirect: '/content' });
+    return res.json({ redirect: "/content" });
   });
 };
 const getAvatar = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ _id: req.session.profile._id }).exec();
+    const profile = await Profile.findOne({
+      _id: req.session.profile._id,
+    }).exec();
     return res.json({ avatar: profile.avatar });
   } catch (err) {
     // console.log(err);
-    return res.status(500).json({ error: 'An error occured' });
+    return res.status(500).json({ error: "An error occured" });
   }
 };
 /**
@@ -65,7 +73,7 @@ const getAvatar = async (req, res) => {
  */
 const createProfile = async (req, res) => {
   if (!req.body.name) {
-    return res.status(400).json({ error: 'Profile name is required.' });
+    return res.status(400).json({ error: "Profile name is required." });
   }
   const profileData = {
     name: req.body.name,
@@ -73,17 +81,23 @@ const createProfile = async (req, res) => {
     owner: req.session.account._id,
   };
   try {
-    const account = await Account.findOne({ _id: req.session.account._id }).exec();
-    // Check if user exceeds profile limit.
-    if ((account.premium === false && account.profileCount >= 5)
-    || (account.premium === true && account.profileCount >= 10)) {
-      return res.status(400).json({ error: 'Maximum number of profiles reached.' });
+    const account = await Account.findOne({
+      _id: req.session.account._id,
+    }).exec();
+    const currentProfileCount = await Profile.countDocuments({
+      owner: req.session.account._id,
+    }).exec();
+    // Check if user exceeds the profile limit.
+    if (currentProfileCount >= MAX_PROFILES) {
+      return res
+        .status(400)
+        .json({ error: "Maximum number of profiles reached." });
     }
     // Create and save profile.
     const newProfile = new Profile(profileData);
     await newProfile.save();
 
-    account.profileCount += 1;
+    account.profileCount = currentProfileCount + 1;
     await account.save();
     return res.status(201).json({
       name: newProfile.name,
@@ -94,9 +108,9 @@ const createProfile = async (req, res) => {
     // Catch and print errors.
     // console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Profile name is taken.' });
+      return res.status(400).json({ error: "Profile name is taken." });
     }
-    return res.status(500).json({ error: 'An error occured' });
+    return res.status(500).json({ error: "An error occured" });
   }
 };
 /**
@@ -107,26 +121,58 @@ const createProfile = async (req, res) => {
  */
 const removeProfile = async (req, res) => {
   if (!req.body.name) {
-    return res.status(400).json({ error: 'Profile name is required.' });
+    return res.status(400).json({ error: "Profile name is required." });
   }
   try {
-    const account = await Account.findOne({ _id: req.session.account._id }).exec();
+    const account = await Account.findOne({
+      _id: req.session.account._id,
+    }).exec();
     const profile = await Profile.findOne({ name: req.body.name }).exec();
     // Check if profile exists or if correct account is even logged in.
     if (!profile) {
-      return res.status(400).json({ error: 'Profile not found.' });
+      return res.status(400).json({ error: "Profile not found." });
     }
     if (profile.owner.toString() !== req.session.account._id) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: "Unauthorized" });
     }
     // Delete the profile and update the account.
     await Profile.deleteOne({ name: req.body.name }).exec();
-    account.profileCount -= 1;
+    account.profileCount = await Profile.countDocuments({
+      owner: req.session.account._id,
+    }).exec();
     await account.save();
     return res.status(204).end();
   } catch (err) {
     // console.log(err);
-    return res.status(500).json({ error: 'An error occured' });
+    return res.status(500).json({ error: "An error occured" });
+  }
+};
+
+const editProfile = async (req, res) => {
+  if (!req.body.name || !req.body.newName) {
+    return res
+      .status(400)
+      .json({ error: "Profile name and new name are required." });
+  }
+  try {
+    const profile = await Profile.findOne({ name: req.body.name }).exec();
+    // Check if profile exists or if correct account is even logged in.
+    if (!profile) {
+      return res.status(400).json({ error: "Profile not found." });
+    }
+    if (profile.owner.toString() !== req.session.account._id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    // Update the profile name and avatar, then save.
+    profile.name = req.body.newName;
+    if (req.body.avatar) {
+      profile.avatar = req.body.avatar;
+    }
+    await profile.save();
+    return res.status(200).json({ message: "Profile updated successfully." });
+  } catch (err) {
+    // console.log(err);
+    return res.status(500).json({ error: "An error occurred" });
   }
 };
 
@@ -138,4 +184,5 @@ module.exports = {
   loadProfile,
   removeProfile,
   getAvatar,
+  editProfile,
 };

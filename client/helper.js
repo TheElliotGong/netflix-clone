@@ -1,9 +1,11 @@
 // Helper function to hide warning message
-const hideError = () => { document.querySelector('.warning').classList.add('hidden'); };
+const hideError = () => {
+  document.querySelector(".warning").classList.add("hidden");
+};
 // Helper function to show warning message.
 const handleError = (message) => {
-  document.querySelector('.warning').classList.remove('hidden');
-  document.querySelector('.errorMessage').textContent = message;
+  document.querySelector(".warning").classList.remove("hidden");
+  document.querySelector(".errorMessage").textContent = message;
 };
 /**
  * This function helps send post requests to the server.
@@ -13,16 +15,25 @@ const handleError = (message) => {
  */
 const sendPost = async (url, data, handler) => {
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
 
-  const result = await response.json();
+  let result = {};
+
+  if (response.status !== 204) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+      result = await response.json();
+    }
+  }
+
   // Hide the error message if it is showing
-  if (document.querySelector('.warning')) {
+  if (document.querySelector(".warning")) {
     hideError();
   }
 
@@ -46,13 +57,16 @@ const sendPost = async (url, data, handler) => {
  */
 const handleLoadProfile = (name) => {
   if (!name) {
-    handleError('Name is required!');
+    handleError("Name is required!");
     return false;
   }
-  sendPost('/loadProfile', { name });
+  sendPost("/loadProfile", { name });
   return false;
 };
 
 module.exports = {
-  sendPost, handleLoadProfile, hideError, handleError,
+  sendPost,
+  handleLoadProfile,
+  hideError,
+  handleError,
 };
