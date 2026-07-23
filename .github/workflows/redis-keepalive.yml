@@ -1,0 +1,31 @@
+name: Redis Keepalive
+
+on:
+  schedule:
+    # Run every 3 days at 00:00 UTC
+    - cron: '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping-redis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ping Redis Cloud instance
+        env:
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}
+        run: node server/redisKeepAlive.js
+
+      - name: Log completion
+        if: success()
+        run: echo "✓ Redis keepalive completed successfully"

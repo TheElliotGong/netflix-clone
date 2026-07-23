@@ -11,7 +11,8 @@
     "lint:client": "eslint ./client --ext .js,.jsx --fix",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
-    "heroku-postbuild": "webpack"
+    "heroku-postbuild": "webpack",
+    "redis:ping": "node server/redisKeepAlive.js"
   },
   "keywords": [
     "Node",
