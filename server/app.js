@@ -13,6 +13,7 @@ const RedisStore = require("connect-redis").default;
 const redis = require("redis");
 
 const router = require("./router.js");
+const { touchRedis, startKeepAlive } = require("./redisKeepAlive.js");
 
 const {
   PORT,
@@ -61,6 +62,20 @@ redisClient.connect().then(() => {
   app.use(compression());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  // Public health check. The scheduled monitor hits this: it wakes the
+  // free-tier web service and issues a real Redis command in one request, so a
+  // 200 here proves the session store is actually reachable. Registered before
+  // the session middleware and before router()'s catch-all, and deliberately
+  // outside requiresSecure so a plain HTTP probe gets an answer, not a redirect.
+  app.get("/health", async (req, res) => {
+    try {
+      const { ping, lastPing } = await touchRedis(redisClient);
+      return res.status(200).json({ status: "ok", redis: ping, lastPing });
+    } catch (err) {
+      return res.status(503).json({ status: "error", message: err.message });
+    }
+  });
+
   // Create a session tracking feature to log users and accounts that access the server/database.
   // These session keys will be stored in redis.
   app.use(
@@ -80,6 +95,10 @@ redisClient.connect().then(() => {
   app.set("views", `${__dirname}/../views`);
   // Create and open the server.
   router(app);
+  // Touch Redis on a timer so an idle-but-awake instance still exercises the
+  // store. Covers only the awake window -- Render's free tier sleeps after
+  // ~15 min idle, which is what the scheduled /health probe is for.
+  startKeepAlive(redisClient);
   app.listen(port, (err) => {
     if (err) {
       throw err;
