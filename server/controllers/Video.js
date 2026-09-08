@@ -5,7 +5,6 @@ const { Video } = models;
 const { Profile } = models;
 // Render the main content page.
 const contentPage = async (req, res) => {
-
   res.render('app');
 };
 /**
@@ -14,7 +13,6 @@ const contentPage = async (req, res) => {
  * @param {*} res
  * @returns
  */
-
 
 const getVideos = async (req, res) => {
   try {

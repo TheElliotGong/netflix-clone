@@ -1,8 +1,10 @@
 // Helper function to hide warning message
-const hideError = () => { document.querySelector(".warning").classList.add('hidden'); };
-//Helper function to show warning message.
+const hideError = () => {
+  document.querySelector(".warning").classList.add("hidden");
+};
+// Helper function to show warning message.
 const handleError = (message) => {
-  document.querySelector(".warning").classList.remove('hidden');
+  document.querySelector(".warning").classList.remove("hidden");
   document.querySelector(".errorMessage").textContent = message;
 };
 /**
@@ -13,45 +15,58 @@ const handleError = (message) => {
  */
 const sendPost = async (url, data, handler) => {
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
 
-  const result = await response.json();
-  //Hide the error message if it is showing
-  if (document.querySelector('.warning')) {
-   hideError();
+  let result = {};
+
+  if (response.status !== 204) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+      result = await response.json();
+    }
   }
 
-  //Redirect to the page if the server requests it.
+  // Hide the error message if it is showing
+  if (document.querySelector(".warning")) {
+    hideError();
+  }
+
+  // Redirect to the page if the server requests it.
   if (result.redirect) {
     window.location = result.redirect;
   }
-  //Show an error message if the server sends one.
+  // Show an error message if the server sends one.
   if (result.error) {
     handleError(result.error);
   }
-  //Call the handler function if the server sends one.
+  // Call the handler function if the server sends one.
   if (handler) {
     handler(result);
   }
 };
 /**
- * This function handles the load profile process for the Domomaker app.
+ * This function handles the load profile process for the Netflix Clone app.
  * @param {*} name the name of the profile to load.
- * @returns 
+ * @returns
  */
 const handleLoadProfile = (name) => {
-
   if (!name) {
-    helper.handleError('Name is required!');
+    handleError("Name is required!");
     return false;
   }
-  sendPost('/loadProfile', { name });
+  sendPost("/loadProfile", { name });
   return false;
-}
+};
 
-module.exports = { sendPost, handleLoadProfile, hideError, handleError };
+module.exports = {
+  sendPost,
+  handleLoadProfile,
+  hideError,
+  handleError,
+};

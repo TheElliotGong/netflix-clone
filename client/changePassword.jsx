@@ -1,7 +1,23 @@
-//import helper files.
-const helper = require("./helper.js");
-const React = require("react");
-const ReactDOM = require("react-dom");
+// import helper files.
+const React = require('react');
+const ReactDOMClient = require('react-dom/client');
+const helper = require('./helper.js');
+
+const roots = {};
+
+const renderAtSelector = (selector, component) => {
+  const container = document.querySelector(selector);
+
+  if (!container) {
+    return;
+  }
+
+  if (!roots[selector]) {
+    roots[selector] = ReactDOMClient.createRoot(container);
+  }
+
+  roots[selector].render(component);
+};
 /**
  * This function handles changing the password for logged in user.
  * @param {*} e
@@ -10,17 +26,17 @@ const ReactDOM = require("react-dom");
 const handlePasswordChange = (e) => {
   e.preventDefault();
   helper.hideError();
-  //Get the passwords from the form.
-  const pass = e.target.querySelector("#pass").value;
-  const pass2 = e.target.querySelector("#pass2").value;
-  const currentPass = e.target.querySelector("#currentPass").value;
-  //Ensure all fields are filled in and new password is valid.
+  // Get the passwords from the form.
+  const pass = e.target.querySelector('#pass').value;
+  const pass2 = e.target.querySelector('#pass2').value;
+  const currentPass = e.target.querySelector('#currentPass').value;
+  // Ensure all fields are filled in and new password is valid.
   if (!pass || !pass2) {
-    helper.handleError("All fields are required.");
+    helper.handleError('All fields are required.');
     return false;
   }
   if (pass !== pass2) {
-    helper.handleError("Passwords do not match.");
+    helper.handleError('Passwords do not match.');
     return false;
   }
   helper.sendPost(e.target.action, { pass, pass2, currentPass });
@@ -31,9 +47,9 @@ const handlePasswordChange = (e) => {
  * @param {*} props
  * @returns
  */
-const ChangePasswordWindow = (props) => {
+function ChangePasswordWindow() {
   return (
-    //Create the form.
+    // Create the form.
     <div className="formWindow">
       <h1>Change Password</h1>
       <form
@@ -73,17 +89,17 @@ const ChangePasswordWindow = (props) => {
           </a>
         </div>
         <h3 className="warning hidden">
-          <span className="errorMessage"></span>
+          <span className="errorMessage" />
         </h3>
       </form>
     </div>
   );
-};
+}
 /**
  * Add react component to page.
  */
 const init = () => {
-  ReactDOM.render(<ChangePasswordWindow />, document.querySelector("#content"));
+  renderAtSelector('#content', <ChangePasswordWindow />);
 };
 
 window.onload = init;
