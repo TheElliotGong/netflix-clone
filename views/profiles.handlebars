@@ -2,31 +2,50 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Netflix Clone</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png" />
   <link rel="stylesheet" type="text/css" href="/assets/profiles.css" />
 </head>
+
 <body>
-  <div id="content">
-    <div id = "profileContent">
-    </div>
-    <div id="editProfileForm">
-    <div class="modal-content">
-      <h2>Edit Profile</h2>
-      <form id="profileForm" action = '/editProfile'>
-        <label for="profileName">Name:</label>
-        <input type="text" id="profileName" name="profileName" required>
-        <label for="profileAvatar">Avatar:</label>
+  <header class="site-header">
+    <a href="/profiles"><img src="/assets/img/title.png" alt="Netflix Clone logo" /></a>
+  </header>
+
+  <main id="content">
+    <div id="profileContent"></div>
+  </main>
+
+  <div id="editProfileForm" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="editProfileTitle">
+    <div class="modal">
+      <h2 class="modal__title" id="editProfileTitle">Edit profile</h2>
+      <form id="profileForm" class="modal__form" action="/editProfile">
+        <label class="field" for="editProfileName">
+          <span class="field__label">Name</span>
+          <input class="field__input" type="text" id="editProfileName" name="profileName" required>
+        </label>
         <div id="profileAvatar"></div>
-        <div class="buttonRow">
-          <button type="submit" id = "saveProfile">Save</button>
-          <button type="button" id="deleteProfile">Delete</button>
-          <button type="button" id="closeForm">Cancel</button>
+        <p class="warning hidden"><span class="errorMessage"></span></p>
+        <div class="modal__actions">
+          <button class="btn btn--danger" type="button" id="deleteProfile">Delete profile</button>
+          <button class="btn btn--ghost" type="button" id="closeForm">Cancel</button>
+          <button class="btn btn--primary" type="submit" id="saveProfile">Save</button>
+        </div>
+        <div class="confirm hidden" id="deleteConfirm">
+          <p class="confirm__message">
+            Delete <strong id="deleteConfirmName"></strong>? Its favorites and watch history go with it,
+            and this can't be undone.
+          </p>
+          <div class="confirm__actions">
+            <button class="btn btn--ghost" type="button" id="cancelDelete">Keep profile</button>
+            <button class="btn btn--danger-solid" type="button" id="confirmDelete">Yes, delete it</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
-  </div>
+
   <script src="/assets/profilesBundle.js"></script>
 </body>
 
